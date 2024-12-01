@@ -1,84 +1,32 @@
 package com.gorevce.authentication_service.controller;
 
-import com.gorevce.authentication_service.dto.request.*;
+
+import com.gorevce.authentication_service.dto.request.PermissionRequest;
 import com.gorevce.authentication_service.exception.CustomException;
-import com.gorevce.authentication_service.service.AuthService;
+import com.gorevce.authentication_service.service.EndpointPermissionService;
 import com.gorevce.authentication_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/authentication/auth")
-public class AuthController {
+@RequestMapping("/authentication/permissions")
+public class PermissionController {
+
     @Autowired
-    private AuthService authService;
+    private EndpointPermissionService endpointPermissionService;
 
-    // signUp
-    @PostMapping("/register")
-    ResponseEntity<?> signUp(@RequestBody SignupRequest signupRequest) {
+    @GetMapping("/get-permissions")
+    public ResponseEntity<?> getPermissions() {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "registered successfully, please verify your email to login an email has been sent to your email address.",
+                            "Permissions retrieved successfully",
                             200,
-                            authService.signup(signupRequest)
+                            endpointPermissionService.getAllPermissions()
                     )
             );
-        }
-        catch (CustomException e) {
-            return ResponseEntity
-                    .status(e.getHttpStatusCode())
-                    .body(
-                            new ApiResponse(
-                                    e.getMessage(),
-                                    e.getHttpStatusCode(),
-                                    e.getDetails()
-                            )
-                    );
-        }
-    }
-    // signIn
-    @PostMapping("/login")
-    ResponseEntity<?> signIn(@RequestBody AuthRequest authRequest) {
-        try {
-            return ResponseEntity.ok(
-                    new ApiResponse(
-                            "logged in successfully",
-                            200,
-                            authService.signin(authRequest)
-                    )
-            );
-        }
-        catch (CustomException e) {
-            return ResponseEntity
-                    .status(e.getHttpStatusCode())
-                    .body(
-                            new ApiResponse(
-                                    e.getMessage(),
-                                    e.getHttpStatusCode(),
-                                    e.getDetails()
-                            )
-                    );
-        }
-    }
-    // TODO: Implement signOut
-    // signOut
-
-
-    // changePassword
-    @PostMapping("/reset-password")
-    ResponseEntity<?> changePassword(@RequestParam String token,@RequestBody PasswordRequest password) {
-        try {
-            return ResponseEntity.ok(
-                    new ApiResponse(
-                            "Password changed successfully",
-                            200,
-                            authService.changePassword(token, password)
-                    )
-            );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -91,43 +39,18 @@ public class AuthController {
         }
     }
 
-    // forgotPassword
-    @PostMapping("/forgot-password")
-    ResponseEntity<?> forgotPassword(@RequestParam String email) {
+    // addPermission
+    @PostMapping("/create-permission")
+    public ResponseEntity<?> addPermission(@RequestBody PermissionRequest createPermissionRequest) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Password reset link sent to email",
+                            "Permission added successfully",
                             200,
-                            authService.forgotPassword(email)
+                            endpointPermissionService.createPermission(createPermissionRequest)
                     )
             );
-        }
-        catch (CustomException e) {
-            return ResponseEntity
-                    .status(e.getHttpStatusCode())
-                    .body(
-                            new ApiResponse(
-                                    e.getMessage(),
-                                    e.getHttpStatusCode(),
-                                    e.getDetails()
-                            )
-                    );
-        }
-    }
-    // verifyEmail
-    @GetMapping("/verify-email")
-    ResponseEntity<?> verifyEmail(@RequestParam String token) {
-        try {
-            return ResponseEntity.ok(
-                    new ApiResponse(
-                            "Email verified successfully",
-                            200,
-                            authService.verifyEmail(token)
-                    )
-            );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -140,19 +63,18 @@ public class AuthController {
         }
     }
 
-    // create new password
-    @PostMapping("/create-password")
-    ResponseEntity<?> createNewPassword(@RequestParam String email,@RequestBody PasswordRequest passwordRequest) {
+    // deletePermission
+    @DeleteMapping("/delete-permission")
+    public ResponseEntity<?> deletePermission(@RequestParam String permissionId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Password created successfully",
+                            "Permission deleted successfully",
                             200,
-                            authService.createNewPassword(email, passwordRequest)
+                            endpointPermissionService.deletePermission(permissionId)
                     )
             );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -165,4 +87,51 @@ public class AuthController {
         }
     }
 
+    // updatePermission
+    @PutMapping("/update-permission")
+    public ResponseEntity<?> updatePermission(@RequestParam String permissionId, @RequestBody PermissionRequest updatePermissionRequest) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Permission updated successfully",
+                            200,
+                            endpointPermissionService.updatePermission(permissionId, updatePermissionRequest)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
+
+    // getPermissionById
+    @GetMapping("/get-permission")
+    public ResponseEntity<?> getPermissionById(@RequestParam String permissionId) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Permission retrieved successfully",
+                            200,
+                            endpointPermissionService.getPermissionById(permissionId)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }

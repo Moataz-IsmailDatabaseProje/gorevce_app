@@ -48,8 +48,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> {
-                            auth.requestMatchers("/auth/login/**").permitAll();
-                            auth.requestMatchers("/auth/register/**").permitAll();
+                            auth.requestMatchers("/authentication/auth/**").permitAll();
+                            auth.requestMatchers("/authentication/**").hasAnyRole("SUPER_ADMIN");
+                            // auth.anyRequest().authenticated();
                         }
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

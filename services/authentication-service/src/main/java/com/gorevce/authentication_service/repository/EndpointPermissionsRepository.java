@@ -11,4 +11,8 @@ public interface EndpointPermissionsRepository extends MongoRepository<EndpointP
     Optional<EndpointPermission> findByEndpointAndHttpMethod(String endpoint, String httpMethod);
 
     void deleteByEndpointAndHttpMethod(String endpoint, String httpMethod);
+
+    Optional<EndpointPermission> findById(String id);
+
+    void deleteById(String id);
 }

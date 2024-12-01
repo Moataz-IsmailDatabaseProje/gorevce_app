@@ -30,23 +30,16 @@ public class AdminUserInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
-            // setup default super admin user
-            Role supreAdminRole = roleService.createRoleIfNotFound("ROLE_SUPER_ADMIN");
-            // setup the endpoint permissions
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/register", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/login", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/logout", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/create-password", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/reset-password", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/forgot-password", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/verify-email", "GET", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/change-email", "POST", Set.of(supreAdminRole));
-            endpointPermissionService.createEndpointPermissionIfNotFound("/auth/change-username", "POST", Set.of(supreAdminRole));
+            // setup default roles
 
+            // setup default permissions
+
+            // setup default super admin user
+            Role userRole = roleService.createRoleIfNotFound("ROLE_USER");
             User adminUser = new User();
             adminUser.setUsername("admin");
             adminUser.setPassword(passwordEncoder.encode("admin123")); // Use secure password encoding
-            adminUser.setRoles(Set.of(Role.builder().name("ROLE_SUPER_ADMIN").build()));
+            adminUser.setRoles(Set.of(Role.builder().name("SUPER_ADMIN").build()));
             userRepository.save(adminUser);
             System.out.println("Default admin user created.");
         }

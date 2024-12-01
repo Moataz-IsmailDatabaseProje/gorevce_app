@@ -14,5 +14,5 @@ public class UserInfoResponse {
     String username;
     String email;
     Boolean isEmailVerified;
-    List<String> roles;
+    List<RoleResponse> roles;
 }

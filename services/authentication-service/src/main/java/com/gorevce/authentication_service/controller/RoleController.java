@@ -1,32 +1,34 @@
 package com.gorevce.authentication_service.controller;
 
-import com.gorevce.authentication_service.dto.request.*;
 import com.gorevce.authentication_service.exception.CustomException;
 import com.gorevce.authentication_service.service.AuthService;
+import com.gorevce.authentication_service.service.RoleService;
 import com.gorevce.authentication_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/authentication/auth")
-public class AuthController {
+@RequestMapping("/authentication/role")
+public class RoleController {
+
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private AuthService authService;
 
-    // signUp
-    @PostMapping("/register")
-    ResponseEntity<?> signUp(@RequestBody SignupRequest signupRequest) {
+    // getRoles
+    @GetMapping("/get-roles")
+    public ResponseEntity<?> getRoles() {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "registered successfully, please verify your email to login an email has been sent to your email address.",
+                            "Roles retrieved successfully",
                             200,
-                            authService.signup(signupRequest)
+                            roleService.getAllRoles()
                     )
             );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -36,49 +38,21 @@ public class AuthController {
                                     e.getDetails()
                             )
                     );
-        }
-    }
-    // signIn
-    @PostMapping("/login")
-    ResponseEntity<?> signIn(@RequestBody AuthRequest authRequest) {
-        try {
-            return ResponseEntity.ok(
-                    new ApiResponse(
-                            "logged in successfully",
-                            200,
-                            authService.signin(authRequest)
-                    )
-            );
-        }
-        catch (CustomException e) {
-            return ResponseEntity
-                    .status(e.getHttpStatusCode())
-                    .body(
-                            new ApiResponse(
-                                    e.getMessage(),
-                                    e.getHttpStatusCode(),
-                                    e.getDetails()
-                            )
-                    );
-        }
-    }
-    // TODO: Implement signOut
-    // signOut
 
-
-    // changePassword
-    @PostMapping("/reset-password")
-    ResponseEntity<?> changePassword(@RequestParam String token,@RequestBody PasswordRequest password) {
+        }
+    }
+    // addRole
+    @PostMapping("/create-role")
+    public ResponseEntity<?> addRole(@RequestParam String role) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Password changed successfully",
+                            "Role added successfully",
                             200,
-                            authService.changePassword(token, password)
+                            roleService.createRole(role)
                     )
             );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -90,20 +64,18 @@ public class AuthController {
                     );
         }
     }
-
-    // forgotPassword
-    @PostMapping("/forgot-password")
-    ResponseEntity<?> forgotPassword(@RequestParam String email) {
+    // updateRole
+    @PutMapping("/update-role")
+    public ResponseEntity<?> updateRole(@RequestParam String id, @RequestParam String role) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Password reset link sent to email",
+                            "Role updated successfully",
                             200,
-                            authService.forgotPassword(email)
+                            roleService.updateRole(id, role)
                     )
             );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -115,19 +87,41 @@ public class AuthController {
                     );
         }
     }
-    // verifyEmail
-    @GetMapping("/verify-email")
-    ResponseEntity<?> verifyEmail(@RequestParam String token) {
+    // deleteRole
+    @DeleteMapping("/delete-role")
+    public ResponseEntity<?> deleteRole(@RequestParam String id) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Email verified successfully",
+                            "Role deleted successfully",
                             200,
-                            authService.verifyEmail(token)
+                            roleService.deleteRole(id)
                     )
             );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
         }
-        catch (CustomException e) {
+    }
+    // getRoleById
+    @GetMapping("/get-role")
+    public ResponseEntity<?> getRoleById(@RequestParam String id) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Role retrieved successfully",
+                            200,
+                            roleService.getRoleById(id)
+                    )
+            );
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -140,19 +134,18 @@ public class AuthController {
         }
     }
 
-    // create new password
-    @PostMapping("/create-password")
-    ResponseEntity<?> createNewPassword(@RequestParam String email,@RequestBody PasswordRequest passwordRequest) {
+    // set role to user
+    @PostMapping("/set-role")
+    public ResponseEntity<?> setRoleToUser(@RequestParam String userId, @RequestParam String roleId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Password created successfully",
+                            "Role set to user successfully",
                             200,
-                            authService.createNewPassword(email, passwordRequest)
+                            authService.setRoleToUser(userId, roleId)
                     )
             );
-        }
-        catch (CustomException e) {
+        } catch (CustomException e) {
             return ResponseEntity
                     .status(e.getHttpStatusCode())
                     .body(
@@ -164,5 +157,4 @@ public class AuthController {
                     );
         }
     }
-
 }

@@ -25,5 +25,7 @@ public class User {
     private Boolean isAccountNonLocked = true;
     private Boolean isCredentialsNonExpired = true;
     private Boolean isEnabled = true;
+    private Boolean isPasswordCreated = false;
+    private Boolean isPasswordChanged = false;
     private Set<Role> roles;
 }

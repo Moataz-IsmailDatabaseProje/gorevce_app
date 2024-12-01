@@ -17,6 +17,7 @@ public class EndpointPermission {
     private String id;
     private String endpoint;
     private String httpMethod;
+    private String description;
     private Set<Role> roles;
 
 }
