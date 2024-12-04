@@ -66,13 +66,13 @@ public class RoleController {
     }
     // updateRole
     @PutMapping("/update-role")
-    public ResponseEntity<?> updateRole(@RequestParam String id, @RequestParam String role) {
+    public ResponseEntity<?> updateRole(@RequestParam String roleId, @RequestParam String role) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
                             "Role updated successfully",
                             200,
-                            roleService.updateRole(id, role)
+                            roleService.updateRole(roleId, role)
                     )
             );
         } catch (CustomException e) {
@@ -89,13 +89,13 @@ public class RoleController {
     }
     // deleteRole
     @DeleteMapping("/delete-role")
-    public ResponseEntity<?> deleteRole(@RequestParam String id) {
+    public ResponseEntity<?> deleteRole(@RequestParam String roleId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
                             "Role deleted successfully",
                             200,
-                            roleService.deleteRole(id)
+                            roleService.deleteRole(roleId)
                     )
             );
         } catch (CustomException e) {
@@ -112,13 +112,13 @@ public class RoleController {
     }
     // getRoleById
     @GetMapping("/get-role")
-    public ResponseEntity<?> getRoleById(@RequestParam String id) {
+    public ResponseEntity<?> getRoleById(@RequestParam String roleId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
                             "Role retrieved successfully",
                             200,
-                            roleService.getRoleById(id)
+                            roleService.getRoleById(roleId)
                     )
             );
         } catch (CustomException e) {

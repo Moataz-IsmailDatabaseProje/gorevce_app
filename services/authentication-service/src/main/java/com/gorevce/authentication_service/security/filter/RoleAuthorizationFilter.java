@@ -29,20 +29,16 @@ public class RoleAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String endpoint = request.getRequestURI();
-        System.out.println("endpoint: " + endpoint);
         String httpMethod = request.getMethod();
-        System.out.println("httpMethod: " + httpMethod);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication: " + authentication);
+
         if (authentication != null && authentication.isAuthenticated()) {
             Optional<EndpointPermission> endpointPermission = endpointPermissionsRepository.findByEndpointAndHttpMethod(endpoint, httpMethod);
-
             if (endpointPermission.isPresent()) {
                 Set<String> userRoles = authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
-
                 boolean hasPermission = endpointPermission.get().getRoles().stream()
                         .map(Role::getName)
                         .anyMatch(userRoles::contains);

@@ -27,7 +27,7 @@ public class ChangeCredentialController {
             String token = request.getHeader("Authorization");
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Email changed successfully",
+                            "Email changed successfully, verify mail send to new email address please verify your new email.",
                             200,
                             authService.changeEmail(changeEmailRequest, token)
                     )
@@ -52,7 +52,7 @@ public class ChangeCredentialController {
             String token = request.getHeader("Authorization");
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Username changed successfully",
+                            "Username changed successfully, please login again with your new username.",
                             200,
                             authService.changeUsername(changeUsernameRequest, token)
                     )

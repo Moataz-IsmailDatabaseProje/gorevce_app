@@ -1,0 +1,99 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: authentication-service
+          uri: lb:http://authentication-service
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/authentication/**
+
+  #        - id: user-service
+  #          uri: lb://user-service
+  #          predicates:
+  #            - Path=/user/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: task-service
+  #          uri: lb://task-service
+  #          predicates:
+  #            - Path=/task/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: project-service
+  #          uri: lb://project-service
+  #          predicates:
+  #            - Path=/project/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: notification-service
+  #          uri: lb://notification-service
+  #          predicates:
+  #            - Path=/notification/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: chat-service
+  #          uri: lb://chat-service
+  #          predicates:
+  #            - Path=/chat/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: file-service
+  #          uri: lb://file-service
+  #          predicates:
+  #            - Path=/file/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: comment-service
+  #          uri: lb://comment-service
+  #          predicates:
+  #            - Path=/comment/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: like-service
+  #          uri: lb://like-service
+  #          predicates:
+  #            - Path=/like/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: notification-service
+  #          uri: lb://notification-service
+  #          predicates:
+  #            - Path=/notification/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: chat-service
+  #          uri: lb://chat-service
+  #          predicates:
+  #            - Path=/chat/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: file-service
+  #          uri: lb://file-service
+  #          predicates:
+  #            - Path=/file/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: comment-service
+  #          uri: lb://comment-service
+  #          predicates:
+  #            - Path=/comment/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: like-service
+  #          uri: lb://like-service
+  #          predicates:
+  #            - Path=/like/**
+  #          filters:
+  #            - StripPrefix=1
+  #        - id: notification-service
+  #          uri: lb://notification-service
+  #          predicates:
+  #            - Path=/
+
+
+server:
+  port: 8090

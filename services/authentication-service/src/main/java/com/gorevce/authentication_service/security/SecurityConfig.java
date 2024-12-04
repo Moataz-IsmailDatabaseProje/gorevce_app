@@ -47,10 +47,13 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
+
+
                         auth -> {
                             auth.requestMatchers("/authentication/auth/**").permitAll();
+                            auth.requestMatchers("/authentication/change-credential/**").authenticated();
                             auth.requestMatchers("/authentication/**").hasAnyRole("SUPER_ADMIN");
-                            // auth.anyRequest().authenticated();
+                            auth.anyRequest().authenticated();
                         }
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

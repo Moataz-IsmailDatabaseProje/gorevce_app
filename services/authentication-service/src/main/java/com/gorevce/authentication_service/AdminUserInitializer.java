@@ -31,6 +31,7 @@ public class AdminUserInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
             // setup default roles
+            Role superAdminRole = roleService.createRoleIfNotFound("ROLE_SUPER_ADMIN");
 
             // setup default permissions
 
@@ -39,7 +40,7 @@ public class AdminUserInitializer implements CommandLineRunner {
             User adminUser = new User();
             adminUser.setUsername("admin");
             adminUser.setPassword(passwordEncoder.encode("admin123")); // Use secure password encoding
-            adminUser.setRoles(Set.of(Role.builder().name("SUPER_ADMIN").build()));
+            adminUser.setRoles(Set.of(superAdminRole));
             userRepository.save(adminUser);
             System.out.println("Default admin user created.");
         }

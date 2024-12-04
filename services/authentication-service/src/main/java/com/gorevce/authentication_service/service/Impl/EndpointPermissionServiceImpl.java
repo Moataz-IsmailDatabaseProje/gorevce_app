@@ -52,6 +52,11 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
 
     @Override
     public PermissionResponse createPermission(PermissionRequest createPermissionRequest) {
+        // check if the permission already exists
+        if (endpointPermissionRepository.existsByEndpointAndHttpMethod(createPermissionRequest.getEndpoint(), createPermissionRequest.getMethod())) {
+            throw new CustomException("Permission already exists", 400, Map.of("endpoint", createPermissionRequest.getEndpoint(), "method", createPermissionRequest.getMethod()));
+        }
+
         // create a new permission
         EndpointPermission endpointPermission = EndpointPermission.builder()
                 .endpoint(createPermissionRequest.getEndpoint())
@@ -72,7 +77,13 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                 .endpoint(saved.getEndpoint())
                 .method(saved.getHttpMethod())
                 .description(saved.getDescription())
-                .roles(new HashSet<>())
+                .roles(saved.getRoles()
+                        .stream()
+                        .map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -90,7 +101,13 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                 .endpoint(endpointPermission.getEndpoint())
                 .method(endpointPermission.getHttpMethod())
                 .description(endpointPermission.getDescription())
-                .roles(new HashSet<>())
+                .roles(endpointPermission.getRoles()
+                        .stream()
+                        .map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -104,6 +121,15 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
         endpointPermission.setEndpoint(updatePermissionRequest.getEndpoint());
         endpointPermission.setHttpMethod(updatePermissionRequest.getMethod());
         endpointPermission.setDescription(updatePermissionRequest.getDescription());
+        endpointPermission.setRoles(updatePermissionRequest
+                .getRoles()
+                .stream()
+                .map(
+                        roleName -> roleService.getRoleByName(roleName)
+                )
+                .collect(Collectors.toSet())
+        );
+
         // save the permission
         EndpointPermission saved = endpointPermissionRepository.save(endpointPermission);
         return PermissionResponse.builder()
@@ -111,7 +137,13 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                 .endpoint(saved.getEndpoint())
                 .method(saved.getHttpMethod())
                 .description(saved.getDescription())
-                .roles(new HashSet<>())
+                .roles(saved.getRoles()
+                        .stream()
+                        .map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

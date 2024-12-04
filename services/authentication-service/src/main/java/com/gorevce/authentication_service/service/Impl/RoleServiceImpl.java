@@ -51,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse deleteRole(String id) {
         // find the role
         Role role = roleRepository.findById(id).orElseThrow(
-                () -> new CustomException("Role does not exist", 404, Collections.singletonMap("role", id))
+                () -> new CustomException("Role does not exist", 404, Collections.singletonMap("roleId", id))
         );
         // Delete the role
         roleRepository.delete(role);
@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse updateRole(String id, String role) {
         // Check if the role exists
         Role roleToUpdate = roleRepository.findById(id).orElseThrow(
-                () -> new CustomException("Role does not exist", 404, Collections.singletonMap("role", id))
+                () -> new CustomException("Role does not exist", 404, Collections.singletonMap("roleID", id))
         );
         // Update the role
         roleToUpdate.setName(role);
@@ -92,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse getRoleById(String id) {
         // Check if the role exists
         if (roleRepository.findById(id).isEmpty()) {
-            throw new CustomException("Role does not exist", 404, Collections.singletonMap("role", id));
+            throw new CustomException("Role does not exist", 404, Collections.singletonMap("roleId", id));
         }
         // Get the role
         Role role = roleRepository.findById(id).get();
@@ -118,7 +118,6 @@ public class RoleServiceImpl implements RoleService {
                 .name(roleAdmin)
                 .build();
         // Save the role
-        roleRepository.save(newRole);
-        return newRole;
+        return roleRepository.save(newRole);
     }
 }

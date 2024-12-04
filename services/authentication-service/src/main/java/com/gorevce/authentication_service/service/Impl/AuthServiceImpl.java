@@ -270,41 +270,55 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserInfoResponse changeEmail(ChangeEmailRequest changeEmailRequest, String token) {
+        // find by user id
+        User userToUpdate = userRepository.findById(changeEmailRequest.getId())
+                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", changeEmailRequest.getLastEmail())));
+        // check if user enabled
+        if (!userToUpdate.getIsEnabled()) {
+            throw new CustomException("User is disabled", 400, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
+        }
+        // check if user email verified
+        if (!userToUpdate.getIsEmailVerified()) {
+            throw new CustomException("Email not verified", 400, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
+        }
+        // check if uer who want to change email is the same user or is user with super admin role
         String tokenWithoutBearer = token.substring(7);
         // extract username from token
         String username = jwtUtils.extractUsername(tokenWithoutBearer);
-        // find by username
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", username)));
-
-        // find by email
-        User user = userRepository.findByEmail(changeEmailRequest.getLastEmail())
-                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail())));
-        // check if user who want to change email is the same user
-        if (currentUser.getEmail()!=null) {
-            if (!currentUser.getEmail().equals(changeEmailRequest.getLastEmail())) {
-                throw new CustomException("Unauthorized", 401, Collections.singletonMap("email", currentUser.getEmail()));
-            }
-        } else {
-            if (!currentUser.getUsername().equals(user.getUsername())) {
-                throw new CustomException("Unauthorized", 401, Collections.singletonMap("username", currentUser.getUsername()));
+        if (userToUpdate.getEmail() != null) {
+            if (!(userToUpdate.getUsername().equals(currentUser.getUsername()) || currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_SUPER_ADMIN")))) {
+                throw new CustomException("Unauthorized", 401, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
             }
         }
-        // check if user enabled
-        if (!user.getIsEnabled()) {
-            throw new CustomException("User is disabled", 400, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
+        // check if user email is not in use
+        if (userRepository.findByEmail(changeEmailRequest.getNewEmail()).isPresent()) {
+            throw new CustomException("Email already in use", 400, Collections.singletonMap("email", changeEmailRequest.getNewEmail()));
         }
         // set email
-        user.setEmail(changeEmailRequest.getNewEmail());
+        userToUpdate.setEmail(changeEmailRequest.getNewEmail());
+        userToUpdate.setIsEmailVerified(false);
+        userToUpdate.setIsEnabled(false);
+        // create verification token
+        userToUpdate.setVerificationToken(UUID.randomUUID().toString());
+        // send verification email
+        String verificationUrl = "http://localhost:8090/authentication/auth/verify-email?token=" + userToUpdate.getVerificationToken();
+        try {
+            emailService.sendVerificationEmail(userToUpdate.getEmail(), verificationUrl);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
         // save user
-        userRepository.save(user);
+        userRepository.save(userToUpdate);
+        // return user info response
         return UserInfoResponse.builder()
-                .Id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .isEmailVerified(user.getIsEmailVerified())
+                .Id(userToUpdate.getId())
+                .username(userToUpdate.getUsername())
+                .email(userToUpdate.getEmail())
+                .isEmailVerified(userToUpdate.getIsEmailVerified())
                 .roles(
-                        user.getRoles().stream().map(role -> RoleResponse.builder()
+                        userToUpdate.getRoles().stream().map(role -> RoleResponse.builder()
                                 .id(role.getId())
                                 .role(role.getName())
                                 .build()
@@ -315,33 +329,50 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserInfoResponse changeUsername(ChangeUsernameRequest changeUsernameRequest, String token) {
+        // check if user enabled
+        User userToUpdate = userRepository.findById(changeUsernameRequest.getId())
+                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", changeUsernameRequest.getLastUsername())));
+        if (!userToUpdate.getUsername().equals(changeUsernameRequest.getLastUsername())) {
+            throw new CustomException("Username not match", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        }
+        if (!userToUpdate.getIsEnabled()) {
+            throw new CustomException("User is disabled", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        }
+        // check if user email verified
+        if (!userToUpdate.getIsEmailVerified()) {
+            throw new CustomException("Email not verified", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        }
+        // find user of endpoint by username
         String tokenWithoutBearer = token.substring(7);
         // extract username from token
         String username = jwtUtils.extractUsername(tokenWithoutBearer);
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", username)));
-        // check if user who want to change username is the same user
-        if (!currentUser.getUsername().equals(changeUsernameRequest.getLastUsername())) {
-            throw new CustomException("Unauthorized", 401, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        // check if user who want to change email is the same user or is user with super admin role
+        if (userToUpdate.getEmail() != null) {
+            if (!(userToUpdate.getUsername().equals(currentUser.getUsername()) || currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_SUPER_ADMIN")))) {
+                throw new CustomException("Unauthorized", 401, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+            }
         }
-        // find by username
-        User user = userRepository.findByUsername(changeUsernameRequest.getLastUsername())
-                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", changeUsernameRequest.getLastUsername())));
-        // check if user enabled
-        if (!user.getIsEnabled()) {
-            throw new CustomException("User is disabled", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        // check if user id and username match
+        if (!userToUpdate.getUsername().equals(changeUsernameRequest.getLastUsername())) {
+            throw new CustomException("Username not match", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        }
+        // check if user new username is not in use
+        if (userRepository.findByUsername(changeUsernameRequest.getNewUsername()).isPresent()) {
+            throw new CustomException("Username already in use", 400, Collections.singletonMap("username", changeUsernameRequest.getNewUsername()));
         }
         // set username
-        user.setUsername(changeUsernameRequest.getNewUsername());
+        userToUpdate.setUsername(changeUsernameRequest.getNewUsername());
         // save user
-        userRepository.save(user);
+        userRepository.save(userToUpdate);
         return UserInfoResponse.builder()
-                .Id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .isEmailVerified(user.getIsEmailVerified())
+                .Id(userToUpdate.getId())
+                .username(userToUpdate.getUsername())
+                .email(userToUpdate.getEmail())
+                .isEmailVerified(userToUpdate.getIsEmailVerified())
                 .roles(
-                        user.getRoles().stream().map(role -> RoleResponse.builder()
+                        userToUpdate.getRoles().stream().map(role -> RoleResponse.builder()
                                 .id(role.getId())
                                 .role(role.getName())
                                 .build()
@@ -355,24 +386,24 @@ public class AuthServiceImpl implements AuthService {
     public UserInfoResponse setRoleToUser(String userId, String roleId) {
         // find by user id
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("user", userId)));
+                .orElseThrow(() -> new CustomException("User not found", 404, new HashMap<>(Map.of("user", userId, "role", roleId))));
         // find by role id
         Role role = roleService.getRoleObjectById(roleId);
         // check if user enabled
         if (!user.getIsEnabled()) {
-            throw new CustomException("User is disabled", 400, Collections.singletonMap("user", userId));
+            throw new CustomException("User is disabled", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
         }
         // check if user email verified
         if (!user.getIsEmailVerified()) {
-            throw new CustomException("Email not verified", 400, Collections.singletonMap("user", userId));
+            throw new CustomException("Email not verified", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
         }
         // check if user created password
         if (!user.getIsPasswordCreated()) {
-            throw new CustomException("Password not created", 400, Collections.singletonMap("user", userId));
+            throw new CustomException("Password not created", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
         }
         // check if user already have the role
         if (user.getRoles().contains(role)) {
-            throw new CustomException("User already have the role", 400, Collections.singletonMap("role", roleId));
+            throw new CustomException("User already have the role", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
         }
         // set role
         user.getRoles().add(role);
