@@ -1,9 +1,9 @@
 
-# Gorevce App
+# Authentication Service
 
-* A project aimed at managing short-term jobs, connecting freelancers with employers, and providing a collaborative environment for mutual understanding between them.
-
-* In this repository, the backend for the Gorevce project has been developed. Here's how you can use it:
+* This is a microservice that provides authentication, authorization, and user management functionalities.
+* The service is built using Spring Boot, Spring Security, and MongoDB.
+* The service is secured using JWT tokens.
 
 ## Table Of Contents
 - [Features](#features)
