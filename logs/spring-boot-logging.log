@@ -45,3 +45,6 @@
 2024-12-04T03:41:19.750+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-12-04T03:46:19.770+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-12-04T03:51:19.775+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-04T03:56:19.778+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-04T04:01:19.815+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-04T04:06:19.819+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
