@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="freelancer-service" />
         <module name="authentication-service" />
         <module name="discovery" />
         <module name="gateway" />
@@ -22,6 +23,7 @@
       <module name="authentication-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
+      <module name="freelancer-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
