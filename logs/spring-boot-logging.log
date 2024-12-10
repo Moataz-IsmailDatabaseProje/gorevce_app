@@ -1,1 +1,10 @@
-2024-12-05T08:32:37.968+03:00  INFO 13792 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-11T01:03:50.449+03:00  INFO 18148 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-11T01:04:22.844+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application AUTHENTICATION-SERVICE with eureka with status DOWN
+2024-12-11T01:04:22.846+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1733868262846, current=DOWN, previous=UP]
+2024-12-11T01:04:22.847+03:00  INFO 18148 --- [authentication-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AUTHENTICATION-SERVICE/sml-kttn:authentication-service:8091: registering service...
+2024-12-11T01:04:22.942+03:00  INFO 18148 --- [authentication-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AUTHENTICATION-SERVICE/sml-kttn:authentication-service:8091 - registration status: 204
+2024-12-11T01:04:23.423+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2024-12-11T01:04:26.426+03:00  WARN 18148 --- [authentication-service] [DiscoveryClient-%d] c.netflix.discovery.TimedSupervisorTask  : task supervisor shutting down, can't accept the task
+2024-12-11T01:04:26.426+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2024-12-11T01:04:26.460+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AUTHENTICATION-SERVICE/sml-kttn:authentication-service:8091 - deregister  status: 200
+2024-12-11T01:04:26.462+03:00  INFO 18148 --- [authentication-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient

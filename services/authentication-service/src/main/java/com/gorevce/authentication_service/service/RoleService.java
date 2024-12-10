@@ -29,4 +29,6 @@ public interface RoleService {
     RoleResponse getRoleById(String id);
 
     Role getRoleObjectById(String roleId);
+
+    boolean roleExistsByName(String name);
 }

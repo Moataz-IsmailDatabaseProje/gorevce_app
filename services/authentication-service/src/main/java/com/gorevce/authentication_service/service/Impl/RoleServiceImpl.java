@@ -18,8 +18,13 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public boolean roleExists(String role) {
+    public boolean roleExistsByName(String role) {
         return roleRepository.findByName(role).isPresent();
+    }
+
+    @Override
+    public boolean roleExists(String roleId) {
+        return roleRepository.findById(roleId).isPresent();
     }
 
     @Override
