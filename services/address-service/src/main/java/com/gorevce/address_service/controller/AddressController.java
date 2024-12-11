@@ -136,13 +136,13 @@ public class AddressController {
 
     // get all addresses by addressOfId
     @GetMapping("/get-addresses-by-addressOfId")
-    ResponseEntity<?> getAllAddressesByAddressOfId(@RequestParam String addressOfId) {
+    ResponseEntity<?> getAllAddressesByAddressOfId(@RequestParam String objectId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
                             "Addresses retrieved successfully",
                             200,
-                            addressService.getAllAddressesByAddressOfId(addressOfId)
+                            addressService.getAllAddressesByAddressOfId(objectId)
                     )
             );
         } catch (CustomException e) {
