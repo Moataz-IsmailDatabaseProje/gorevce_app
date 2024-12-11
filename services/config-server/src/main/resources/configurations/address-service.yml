@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/address_db?authSource=admin
+
+gorevce:
+  app:
+    jwtSecret: SaK_SaU_BBF_CS_GoReVcE_SecretKey_2024_2025_bilgisayar_muhendisligi_tasarimi_54_halep_iskenderiye
+    jwtExpirationMs: 86400000
+
+server:
+    port: 8092
