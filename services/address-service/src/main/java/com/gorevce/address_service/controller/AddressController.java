@@ -1,32 +1,30 @@
-package com.gorevce.authentication_service.controller;
+package com.gorevce.address_service.controller;
 
-import com.gorevce.authentication_service.exception.CustomException;
-import com.gorevce.authentication_service.service.AuthService;
-import com.gorevce.authentication_service.service.RoleService;
-import com.gorevce.authentication_service.util.ApiResponse;
+
+import com.gorevce.address_service.dto.AddressRequest;
+import com.gorevce.address_service.exception.CustomException;
+import com.gorevce.address_service.service.AddressService;
+import com.gorevce.address_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/authentication/role")
-public class RoleController {
+@RequestMapping("/address")
+public class AddressController {
 
     @Autowired
-    private RoleService roleService;
-    @Autowired
-    private AuthService authService;
+    private AddressService addressService;
 
-    // getRoles
-    @GetMapping("/get-roles")
-    public ResponseEntity<?> getRoles() {
+    // create address
+    @PostMapping("/create-address")
+    ResponseEntity<?> createAddress(@RequestBody AddressRequest addressRequest) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Roles retrieved successfully",
+                            "Address created successfully",
                             200,
-                            roleService.getAllRoles()
+                            addressService.createAddress(addressRequest)
                     )
             );
         } catch (CustomException e) {
@@ -39,18 +37,18 @@ public class RoleController {
                                     e.getDetails()
                             )
                     );
+        }
 
-        }
     }
-    // addRole
-    @PostMapping("/create-role")
-    public ResponseEntity<?> addRole(@RequestParam String role) {
+    // get address by id
+    @GetMapping("/get-address")
+    ResponseEntity<?> getAddressById(@RequestParam String id) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Role added successfully",
+                            "Address retrieved successfully",
                             200,
-                            roleService.createRole(role)
+                            addressService.getAddressById(id)
                     )
             );
         } catch (CustomException e) {
@@ -65,15 +63,15 @@ public class RoleController {
                     );
         }
     }
-    // updateRole
-    @PutMapping("/update-role")
-    public ResponseEntity<?> updateRole(@RequestParam String roleId, @RequestParam String role) {
+    // get all addresses
+    @GetMapping("/get-addresses")
+    ResponseEntity<?> getAllAddresses() {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Role updated successfully",
+                            "Addresses retrieved successfully",
                             200,
-                            roleService.updateRole(roleId, role)
+                            addressService.getAllAddresses()
                     )
             );
         } catch (CustomException e) {
@@ -88,15 +86,15 @@ public class RoleController {
                     );
         }
     }
-    // deleteRole
-    @DeleteMapping("/delete-role")
-    public ResponseEntity<?> deleteRole(@RequestParam String roleId) {
+    // update address
+    @PutMapping("/update-address")
+    ResponseEntity<?> updateAddress(@RequestParam String id,@RequestBody AddressRequest addressRequest) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Role deleted successfully",
+                            "Address updated successfully",
                             200,
-                            roleService.deleteRole(roleId)
+                            addressService.updateAddress(id, addressRequest)
                     )
             );
         } catch (CustomException e) {
@@ -111,15 +109,16 @@ public class RoleController {
                     );
         }
     }
-    // getRoleById
-    @GetMapping("/get-role")
-    public ResponseEntity<?> getRoleById(@RequestParam String roleId) {
+    // delete address
+    @DeleteMapping("/delete-address")
+    ResponseEntity<?> deleteAddress(@RequestParam String id) {
         try {
+            addressService.deleteAddress(id);
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Role retrieved successfully",
+                            "Address deleted successfully",
                             200,
-                            roleService.getRoleById(roleId)
+                            null
                     )
             );
         } catch (CustomException e) {
@@ -135,15 +134,15 @@ public class RoleController {
         }
     }
 
-    // set role to user
-    @PostMapping("/set-role")
-    public ResponseEntity<?> setRoleToUser(@RequestParam String userId, @RequestParam String roleId) {
+    // get all addresses by addressOfId
+    @GetMapping("/get-addresses-by-addressOfId")
+    ResponseEntity<?> getAllAddressesByAddressOfId(@RequestParam String objectId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
-                            "Role set to user successfully",
+                            "Addresses retrieved successfully",
                             200,
-                            authService.setRoleToUser(userId, roleId)
+                            addressService.getAllAddressesByAddressOfId(objectId)
                     )
             );
         } catch (CustomException e) {

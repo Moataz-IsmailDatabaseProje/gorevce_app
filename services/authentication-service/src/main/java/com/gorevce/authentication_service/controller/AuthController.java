@@ -4,11 +4,15 @@ import com.gorevce.authentication_service.dto.request.*;
 import com.gorevce.authentication_service.exception.CustomException;
 import com.gorevce.authentication_service.service.AuthService;
 import com.gorevce.authentication_service.util.ApiResponse;
+import jakarta.ws.rs.OPTIONS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.processing.SupportedOptions;
+
 @RestController
+@CrossOrigin
 @RequestMapping("/authentication/auth")
 public class AuthController {
     @Autowired

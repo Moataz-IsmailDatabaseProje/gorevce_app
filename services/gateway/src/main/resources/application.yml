@@ -13,8 +13,14 @@ spring:
         - id: authentication-service
           uri: lb:http://authentication-service
           predicates:
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
             - Path=/authentication/**
+
+        - id: address-service
+          uri: lb:http://address-service
+          predicates:
+            - Method=GET,POST,PUT,DELETE,OPTIONS
+            - Path=/address/**
 
 #        - id: user-service
 #          uri: lb://user-service

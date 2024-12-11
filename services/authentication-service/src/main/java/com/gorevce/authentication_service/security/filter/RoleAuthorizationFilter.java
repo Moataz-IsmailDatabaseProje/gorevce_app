@@ -45,6 +45,7 @@ public class RoleAuthorizationFilter extends OncePerRequestFilter {
 
                 if (!hasPermission) {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    System.out.println("User does not have permission to access this endpoint (RoleAuthorizationFilter)");
                     return;
                 }
             }

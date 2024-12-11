@@ -56,14 +56,27 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException("Username already exists", 400, Collections.singletonMap("username", signupRequest.getUsername()));
         }
 
-        // check if role exists
-        if (!roleService.roleExists("ROLE_USER")) {
-            // throw
-            throw new CustomException("ROLE_USER not found",400,null);
-        }
-        Role role = roleService.getRoleByName("ROLE_USER");
+        // create roles
         Set<Role> roles = new HashSet<>();
-        roles.add(role);
+        if (signupRequest.getRole() != null) {
+            String roleName = signupRequest.getRole().toUpperCase().startsWith("ROLE_") ? signupRequest.getRole().toUpperCase() : ("ROLE_" + signupRequest.getRole().toUpperCase());
+            Role role = roleService.getRoleByName(roleName);
+            if (role == null) {
+                throw new CustomException("Role not found", 404, Collections.singletonMap("role", signupRequest.getRole()));
+            }
+            Role defaultRole = roleService.getRoleByName("ROLE_USER");
+            if (defaultRole == null) {
+                throw new CustomException("Role not found", 404, Collections.singletonMap("role", "USER"));
+            }
+            roles.add(defaultRole);
+            roles.add(role);
+        } else {
+            Role role = roleService.getRoleByName("ROLE_USER");
+            if (role == null) {
+                throw new CustomException("Role not found", 404, Collections.singletonMap("role", "USER"));
+            }
+            roles.add(role);
+        }
         // create user
         User user = User.builder()
                 .email(signupRequest.getEmail())
@@ -92,9 +105,9 @@ public class AuthServiceImpl implements AuthService {
                 .email(savedUser.getEmail())
                 .isEmailVerified(savedUser.getIsEmailVerified())
                 .roles(
-                        savedUser.getRoles().stream().map(role1 -> RoleResponse.builder()
-                                .id(role1.getId())
-                                .role(role1.getName())
+                        savedUser.getRoles().stream().map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
                                 .build()
                         ).toList()
                 )
@@ -270,9 +283,25 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserInfoResponse changeEmail(ChangeEmailRequest changeEmailRequest, String token) {
-        // find by user id
-        User userToUpdate = userRepository.findById(changeEmailRequest.getId())
-                .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("username", changeEmailRequest.getLastEmail())));
+        // find by user id if id not null or find by username if username not null
+        User userToUpdate = null;
+        if (changeEmailRequest.getId() != null) {
+            userToUpdate = userRepository.findById(changeEmailRequest.getId())
+                    .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail())));
+        } else if (changeEmailRequest.getUsername() != null) {
+            userToUpdate = userRepository.findByUsername(changeEmailRequest.getUsername())
+                    .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail())));
+        }
+        if (changeEmailRequest.getId()!=null && changeEmailRequest.getUsername()!=null) {
+            userToUpdate = userRepository.findById(changeEmailRequest.getId())
+                    .orElseThrow(() -> new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail())));
+            if (!userToUpdate.getUsername().equals(changeEmailRequest.getUsername())) {
+                throw new CustomException("Username not match", 400, Collections.singletonMap("username", changeEmailRequest.getUsername()));
+            }
+        }
+        if (userToUpdate == null) {
+            throw new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
+        }
         // check if user enabled
         if (!userToUpdate.getIsEnabled()) {
             throw new CustomException("User is disabled", 400, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
