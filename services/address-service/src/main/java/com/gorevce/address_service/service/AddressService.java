@@ -21,4 +21,7 @@ public interface AddressService {
 
     // delete address
     void deleteAddress(String id);
+
+    // get all addresses by addressOfId
+    List<AddressResponse> getAllAddressesByAddressOfId(String addressOfId);
 }

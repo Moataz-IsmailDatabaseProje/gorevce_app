@@ -14,5 +14,6 @@ public class AddressResponse {
     private String street;
     private String postalCode;
     private String additionalInfo;
+    private String addressOfId;
 
 }

@@ -28,6 +28,7 @@ public class AddressServiceImpl implements AddressService {
                 .street(addressRequest.getStreet())
                 .postalCode(addressRequest.getPostalCode())
                 .additionalInfo(addressRequest.getAdditionalInfo())
+                .addressOfId(addressRequest.getAddressOfId())
                 .build();
         // save address to database
         Address savedAddress = addressRepository.save(address);
@@ -39,6 +40,7 @@ public class AddressServiceImpl implements AddressService {
                 .street(savedAddress.getStreet())
                 .postalCode(savedAddress.getPostalCode())
                 .additionalInfo(savedAddress.getAdditionalInfo())
+                .addressOfId(savedAddress.getAddressOfId())
                 .build();
     }
 
@@ -56,6 +58,7 @@ public class AddressServiceImpl implements AddressService {
                 .street(address.getStreet())
                 .postalCode(address.getPostalCode())
                 .additionalInfo(address.getAdditionalInfo())
+                .addressOfId(address.getAddressOfId())
                 .build();
     }
 
@@ -64,16 +67,16 @@ public class AddressServiceImpl implements AddressService {
         // get all addresses
         List<Address> addresses = addressRepository.findAll();
         // return address response list
-        return List.of(
-                AddressResponse.builder()
-                        .id("1")
-                        .country("country")
-                        .city("city")
-                        .street("street")
-                        .postalCode("postalCode")
-                        .additionalInfo("additionalInfo")
-                        .build()
-        );
+        return addresses.stream().map(address -> AddressResponse.builder()
+                .id(address.getId())
+                .country(address.getCountry())
+                .city(address.getCity())
+                .street(address.getStreet())
+                .postalCode(address.getPostalCode())
+                .additionalInfo(address.getAdditionalInfo())
+                .addressOfId(address.getAddressOfId())
+                .build()
+        ).toList();
     }
 
     @Override
@@ -88,6 +91,7 @@ public class AddressServiceImpl implements AddressService {
         address.setStreet(addressRequest.getStreet());
         address.setPostalCode(addressRequest.getPostalCode());
         address.setAdditionalInfo(addressRequest.getAdditionalInfo());
+        address.setAddressOfId(addressRequest.getAddressOfId());
         // save updated address to database
         Address updatedAddress = addressRepository.save(address);
         // return address response
@@ -98,6 +102,7 @@ public class AddressServiceImpl implements AddressService {
                 .street(updatedAddress.getStreet())
                 .postalCode(updatedAddress.getPostalCode())
                 .additionalInfo(updatedAddress.getAdditionalInfo())
+                .addressOfId(updatedAddress.getAddressOfId())
                 .build();
     }
 
@@ -109,5 +114,22 @@ public class AddressServiceImpl implements AddressService {
         );
         // delete address
         addressRepository.delete(address);
+    }
+
+    @Override
+    public List<AddressResponse> getAllAddressesByAddressOfId(String addressOfId) {
+        // get all addresses by addressOfId
+        List<Address> addresses = addressRepository.findAllByAddressOfId(addressOfId);
+        // return address response list
+        return addresses.stream().map(address -> AddressResponse.builder()
+                .id(address.getId())
+                .country(address.getCountry())
+                .city(address.getCity())
+                .street(address.getStreet())
+                .postalCode(address.getPostalCode())
+                .additionalInfo(address.getAdditionalInfo())
+                .addressOfId(address.getAddressOfId())
+                .build()
+        ).toList();
     }
 }

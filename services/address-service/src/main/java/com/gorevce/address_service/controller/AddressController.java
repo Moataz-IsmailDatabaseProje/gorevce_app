@@ -7,10 +7,7 @@ import com.gorevce.address_service.service.AddressService;
 import com.gorevce.address_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/address")
@@ -44,7 +41,8 @@ public class AddressController {
 
     }
     // get address by id
-    ResponseEntity<?> getAddressById(String id) {
+    @GetMapping("/get-address")
+    ResponseEntity<?> getAddressById(@RequestParam String id) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
@@ -66,6 +64,7 @@ public class AddressController {
         }
     }
     // get all addresses
+    @GetMapping("/get-addresses")
     ResponseEntity<?> getAllAddresses() {
         try {
             return ResponseEntity.ok(
@@ -88,7 +87,8 @@ public class AddressController {
         }
     }
     // update address
-    ResponseEntity<?> updateAddress(String id, AddressRequest addressRequest) {
+    @PutMapping("/update-address")
+    ResponseEntity<?> updateAddress(@RequestParam String id,@RequestBody AddressRequest addressRequest) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
@@ -110,7 +110,8 @@ public class AddressController {
         }
     }
     // delete address
-    ResponseEntity<?> deleteAddress(String id) {
+    @DeleteMapping("/delete-address")
+    ResponseEntity<?> deleteAddress(@RequestParam String id) {
         try {
             addressService.deleteAddress(id);
             return ResponseEntity.ok(
@@ -133,4 +134,27 @@ public class AddressController {
         }
     }
 
+    // get all addresses by addressOfId
+    @GetMapping("/get-addresses-by-addressOfId")
+    ResponseEntity<?> getAllAddressesByAddressOfId(@RequestParam String addressOfId) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Addresses retrieved successfully",
+                            200,
+                            addressService.getAllAddressesByAddressOfId(addressOfId)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }
