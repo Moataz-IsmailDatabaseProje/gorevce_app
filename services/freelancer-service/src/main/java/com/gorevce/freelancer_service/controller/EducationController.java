@@ -1,30 +1,29 @@
 package com.gorevce.freelancer_service.controller;
 
-
-import com.gorevce.freelancer_service.dto.request.CertificateRequest;
+import com.gorevce.freelancer_service.dto.request.EducationRequest;
 import com.gorevce.freelancer_service.exception.CustomException;
-import com.gorevce.freelancer_service.service.CertificateService;
+import com.gorevce.freelancer_service.service.EducationService;
 import com.gorevce.freelancer_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/freelancer/certificates")
-public class CertificateController {
+@RequestMapping("/freelancer/educations")
+public class EducationController {
 
     @Autowired
-    private CertificateService certificateService;
+    private EducationService educationService;
 
-    // create certificate
-    @PostMapping("/create-certificate")
-    public ResponseEntity<?> createCertificate(@RequestBody CertificateRequest certificateRequest) {
+    // create education
+    @PostMapping("/create-education")
+    public ResponseEntity<?> createEducation(@RequestBody EducationRequest educationRequest) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificate created successfully")
+                            .message("Education created successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.createCertificate(certificateRequest))
+                            .response(educationService.createEducation(educationRequest))
                             .build()
             );
         } catch (CustomException e) {
@@ -40,15 +39,16 @@ public class CertificateController {
 
         }
     }
-    // get certificate by id
-    @GetMapping("/get-certificate")
-    public ResponseEntity<?> getCertificateById(@RequestParam String id) {
+
+    // get education by id
+    @GetMapping("/get-education")
+    public ResponseEntity<?> getEducationById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificate retrieved successfully")
+                            .message("Education retrieved successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.getCertificate(id))
+                            .response(educationService.getEducation(id))
                             .build()
             );
         } catch (CustomException e) {
@@ -61,17 +61,19 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
-    // get all certificates by freelancer id
-    @GetMapping("/get-certificates")
-    public ResponseEntity<?> getCertificatesByFreelancerId(@RequestParam String freelancerId) {
+
+    // get all educations by freelancer id
+    @GetMapping("/get-educations")
+    public ResponseEntity<?> getEducationsByFreelancerId(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificates retrieved successfully")
+                            .message("Educations retrieved successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.getCertificatesByFreelancer(freelancerId))
+                            .response(educationService.getEducationsByFreelancer(freelancerId))
                             .build()
             );
         } catch (CustomException e) {
@@ -84,17 +86,19 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
-    // update certificate by id
-    @PutMapping("/update-certificate")
-    public ResponseEntity<?> updateCertificate(@RequestParam String id, @RequestBody CertificateRequest certificateRequest) {
+
+    // update education
+    @PutMapping("/update-education")
+    public ResponseEntity<?> updateEducation(@RequestParam String id, @RequestBody EducationRequest educationRequest) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificate updated successfully")
+                            .message("Education updated successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.updateCertificate(id, certificateRequest))
+                            .response(educationService.updateEducation(id, educationRequest))
                             .build()
             );
         } catch (CustomException e) {
@@ -107,18 +111,19 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
-    // delete certificate by id
-    @DeleteMapping("/delete-certificate")
-    public ResponseEntity<?> deleteCertificate(@RequestParam String id) {
+
+    // delete education
+    @DeleteMapping("/delete-education")
+    public ResponseEntity<?> deleteEducation(@RequestParam String id) {
         try {
-            certificateService.deleteCertificate(id);
+            educationService.deleteEducation(id);
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificate deleted successfully")
+                            .message("Education deleted successfully")
                             .httpStatusCode(200)
-                            .response(null)
                             .build()
             );
         } catch (CustomException e) {
@@ -131,17 +136,19 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
-    // get all certificates
-    @GetMapping("/get-all-certificates")
-    public ResponseEntity<?> getAllCertificates() {
+
+    // get all educations
+    @GetMapping("/get-all-educations")
+    public ResponseEntity<?> getAllEducations() {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificates retrieved successfully")
+                            .message("Educations retrieved successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.getCertificates())
+                            .response(educationService.getEducations())
                             .build()
             );
         } catch (CustomException e) {
@@ -154,17 +161,19 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
-    // get certificate details by id
-    @GetMapping("/get-certificate-details")
-    public ResponseEntity<?> getCertificateDetails(@RequestParam String id) {
+
+    // get education details
+    @GetMapping("/get-education-details")
+    public ResponseEntity<?> getEducationDetails(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .message("Certificate details retrieved successfully")
+                            .message("Education details retrieved successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.getCertificateDetails(id))
+                            .response(educationService.getEducationDetails(id))
                             .build()
             );
         } catch (CustomException e) {
@@ -177,6 +186,9 @@ public class CertificateController {
                                     .response(e.getDetails())
                                     .build()
                     );
+
         }
     }
+
+
 }

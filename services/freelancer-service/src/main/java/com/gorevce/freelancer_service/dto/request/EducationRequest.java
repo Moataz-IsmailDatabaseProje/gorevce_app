@@ -1,20 +1,16 @@
-package com.gorevce.freelancer_service.model;
+package com.gorevce.freelancer_service.dto.request;
+
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection = "education")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Education {
-    @Id
-    private String id;
+public class EducationRequest {
     private String school;
     private String degree;
     private String fieldOfStudy;
@@ -25,5 +21,4 @@ public class Education {
     private String description;
     private String imageUrl;
     private String freelancerId;
-
 }
