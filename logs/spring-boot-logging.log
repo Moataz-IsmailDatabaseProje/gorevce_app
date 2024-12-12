@@ -254,3 +254,11 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2024-12-03T15:56:38Z. Curren
 2024-12-12T02:07:22.586+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-12-12T02:12:22.627+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-12-12T02:17:22.643+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:22:22.683+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:27:22.714+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:32:22.717+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:37:22.722+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:42:22.738+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:47:22.983+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:52:22.988+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-12-12T02:57:23.004+03:00  INFO 20976 --- [authentication-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
