@@ -1,8 +1,11 @@
 package com.gorevce.freelancer_service.model;
 
+import com.gorevce.freelancer_service.model.enums.PlatformEnum;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 @Document(collection = "social_media")
 @Getter
@@ -13,8 +16,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SocialMedia {
     @Id
     private String id;
-    private String name;
+    @Field(targetType = FieldType.STRING)
+    private PlatformEnum platform;
     private String url;
     private String imageUrl;
+    private String freelancerId;
 
 }
