@@ -1,24 +1,20 @@
-package com.gorevce.freelancer_service.model;
+package com.gorevce.freelancer_service.dto.response;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection = "reviews")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review {
-    @Id
+public class ReviewResponse {
     private String id;
     private String reviewerId;
     private String review;
-    private int rating;
     private Date createdAt;
+    private int rating;
     private String imageUrl;
     private String freelancerId;
 }
