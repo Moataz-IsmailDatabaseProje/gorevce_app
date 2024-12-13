@@ -1,20 +1,16 @@
-package com.gorevce.freelancer_service.model;
+package com.gorevce.freelancer_service.dto.request;
+
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection = "work_experience")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkExperience {
-    @Id
-    private String id;
+public class WorkExperienceRequest {
     private String title;
     private String company;
     private String city;
