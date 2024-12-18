@@ -2,7 +2,9 @@ package com.gorevce.authentication_service.controller;
 
 
 import com.gorevce.authentication_service.dto.request.PermissionRequest;
+import com.gorevce.authentication_service.dto.response.PermissionResponse;
 import com.gorevce.authentication_service.exception.CustomException;
+import com.gorevce.authentication_service.model.EndpointPermission;
 import com.gorevce.authentication_service.service.EndpointPermissionService;
 import com.gorevce.authentication_service.util.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,5 +136,10 @@ public class PermissionController {
                             )
                     );
         }
+    }
+    // getPermissionByEndpoint
+    @GetMapping("/rest-template/get-permission")
+    public PermissionResponse getPermissionByEndpoint(@RequestParam String endpoint, @RequestParam String httpMethod) {
+        return endpointPermissionService.permissionByEndpointAndHttpMethod(endpoint, httpMethod);
     }
 }

@@ -167,4 +167,23 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                 .build();
     }
 
+    @Override
+    public PermissionResponse permissionByEndpointAndHttpMethod(String endpoint, String httpMethod) {
+        // find the permission by endpoint and httpMethod
+        EndpointPermission endpointPermission = endpointPermissionRepository.findByEndpointAndHttpMethod(endpoint, httpMethod).orElseThrow(
+                () -> new CustomException("Permission not found", 404, Map.of("endpoint", endpoint, "httpMethod", httpMethod))
+        );
+        Set<Role> roles = endpointPermission.getRoles();
+        Set<RoleResponse> roleResponses = roles.stream().map(role -> RoleResponse.builder()
+                .id(role.getId())
+                .role(role.getName())
+                .build()).collect(Collectors.toSet());
+        return PermissionResponse.builder()
+                .id(endpointPermission.getId())
+                .endpoint(endpointPermission.getEndpoint())
+                .method(endpointPermission.getHttpMethod())
+                .description(endpointPermission.getDescription())
+                .roles(roleResponses)
+                .build();
+    }
 }

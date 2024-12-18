@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="freelancer-service" />
         <module name="authentication-service" />
         <module name="address-service" />
         <module name="discovery" />
@@ -15,7 +16,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="freelancer-service" target="17" />
       <module name="user-service" target="17" />
     </bytecodeTargetLevel>
   </component>

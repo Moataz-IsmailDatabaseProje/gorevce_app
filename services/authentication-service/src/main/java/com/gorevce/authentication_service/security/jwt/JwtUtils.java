@@ -39,6 +39,13 @@ public class JwtUtils {
     // Generate a new JWT token for the user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", userDetails.getAuthorities()
+                .stream()
+                .map(
+                        role -> role.getAuthority().substring(5) // Remove the "ROLE_" prefix
+                )
+                .toArray()
+        );
         return createToken(claims, userDetails.getUsername());
     }
 

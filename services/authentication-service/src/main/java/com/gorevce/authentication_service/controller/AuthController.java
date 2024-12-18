@@ -1,6 +1,7 @@
 package com.gorevce.authentication_service.controller;
 
 import com.gorevce.authentication_service.dto.request.*;
+import com.gorevce.authentication_service.dto.response.UserInfoResponse;
 import com.gorevce.authentication_service.exception.CustomException;
 import com.gorevce.authentication_service.service.AuthService;
 import com.gorevce.authentication_service.util.ApiResponse;
@@ -169,4 +170,24 @@ public class AuthController {
         }
     }
 
+    // get user details
+    @GetMapping("/rest-template/get-user/{userId}")
+    ResponseEntity<?> getUserDetails(@PathVariable String userId) {
+        try {
+            return ResponseEntity.ok(
+                    authService.getUserInfoResponseById(userId)
+            );
+        }
+        catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }

@@ -453,4 +453,31 @@ public class AuthServiceImpl implements AuthService {
                 )
                 .build();
     }
+
+    @Override
+    public UserInfoResponse getUserInfoResponseById(String userId) {
+        // find by user id
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(
+                        "User not found",
+                        404,
+                        Map.of(
+                                "user", userId
+                        )
+                    )
+                );
+        return UserInfoResponse.builder()
+                .Id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .isEmailVerified(user.getIsEmailVerified())
+                .roles(
+                        user.getRoles().stream().map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
+                                .build()
+                        ).toList()
+                )
+                .build();
+    }
 }

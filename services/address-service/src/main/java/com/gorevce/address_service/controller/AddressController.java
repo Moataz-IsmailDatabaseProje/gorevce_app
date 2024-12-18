@@ -157,4 +157,24 @@ public class AddressController {
                     );
         }
     }
+
+    // get address by addressId for rest template call
+    @GetMapping("/rest-template/get-address/{addressId}")
+    ResponseEntity<?> getAddressByIdForRestTemplate(@PathVariable String addressId) {
+        try {
+            return ResponseEntity.ok(
+                    addressService.getAddressById(addressId)
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }
