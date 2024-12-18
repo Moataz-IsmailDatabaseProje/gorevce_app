@@ -1,13 +1,17 @@
-package com.gorevce.authentication_service.security.jwt;
+package com.gorevce.freelancer_service.security.jwt;
 
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -36,23 +40,17 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    // Generate a new JWT token for the user
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", userDetails.getAuthorities()
-                .stream()
-                .map(
-                        role -> role.getAuthority().substring(5) // Remove the "ROLE_" prefix
-                )
-                .toArray()
-        );
-        return createToken(claims, userDetails.getUsername());
-    }
-
     // Validate the JWT token
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // Check if the token has expired
@@ -81,4 +79,21 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+    
+
+    public List<GrantedAuthority> extractAuthorities(String token) {
+        // extract authorities from token
+        Claims claims = extractAllClaims(token);
+        List<String> roles = claims.get("roles", List.class);
+        return roles.stream()
+                .map(role -> (GrantedAuthority) () -> "ROLE_" + role)
+                .toList();
+    }
 }

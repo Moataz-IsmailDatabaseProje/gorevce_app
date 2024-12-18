@@ -3,6 +3,7 @@ package com.gorevce.freelancer_service.service;
 import com.gorevce.freelancer_service.dto.request.WorkExperienceRequest;
 import com.gorevce.freelancer_service.dto.response.WorkExperienceDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.WorkExperienceResponse;
+import com.gorevce.freelancer_service.model.WorkExperience;
 
 import java.util.List;
 
@@ -27,4 +28,7 @@ public interface WorkExperienceService {
 
     // get work experience details by id
     WorkExperienceDetailsResponse getWorkExperienceDetailsById(String id);
+
+    // get work experience model by id
+    WorkExperience getWorkExperienceModelById(String id);
 }

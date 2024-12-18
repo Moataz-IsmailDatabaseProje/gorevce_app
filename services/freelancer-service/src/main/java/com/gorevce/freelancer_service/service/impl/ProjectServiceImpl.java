@@ -49,9 +49,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse getProject(String projectId) {
         // get project
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException("Project not found",404, Map.of("projectId",projectId))
-        );
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Project not found",
+                                404,
+                                Map.of(
+                                        "projectId",projectId
+                                )
+                        )
+                );
         // return project
         return ProjectResponse.builder()
                 .id(project.getId())
@@ -66,9 +73,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse updateProject(String projectId, ProjectRequest projectDto) {
         // get project
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException("Project not found",404, Map.of("projectId",projectId))
-        );
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Project not found",
+                                404,
+                                Map.of(
+                                        "projectId",projectId
+                                )
+                        )
+                );
         // update project
         project.setName(projectDto.getName());
         project.setDescription(projectDto.getDescription());
@@ -96,9 +110,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(String projectId) {
         // get project
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException("Project not found",404, Map.of("projectId",projectId))
-        );
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Project not found",
+                                404,
+                                Map.of(
+                                        "projectId",projectId
+                                )
+                        )
+                );
         // delete project
         projectRepository.delete(project);
     }
@@ -139,7 +160,15 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDetailsResponse getProjectDetails(String projectId) {
         // get project
         Project project = projectRepository.findById(projectId).
-                orElseThrow(() -> new CustomException("Project not found",404, Map.of("projectId",projectId)));
+                orElseThrow(
+                        () -> new CustomException(
+                                "Project not found",
+                                404,
+                                Map.of(
+                                        "projectId",projectId
+                                )
+                        )
+                );
         // return project details
         return ProjectDetailsResponse.builder()
                 .id(project.getId())
@@ -153,5 +182,20 @@ public class ProjectServiceImpl implements ProjectService {
                 .projectEndDate(project.getProjectEndDate())
                 .freelancerId(project.getFreelancerId())
                 .build();
+    }
+
+    @Override
+    public Project getProjectModelById(String id) {
+        // get project by id
+        return projectRepository.findById(id)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Project not found",
+                                404,
+                                Map.of(
+                                        "id",id
+                                )
+                        )
+                );
     }
 }

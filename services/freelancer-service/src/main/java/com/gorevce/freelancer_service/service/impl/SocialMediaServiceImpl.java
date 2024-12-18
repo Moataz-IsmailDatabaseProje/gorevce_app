@@ -26,7 +26,13 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     public SocialMediaResponse createSocialMedia(SocialMediaRequest socialMedia) {
         // check if social media enum is valid
         if (!PlatformEnum.isPlatformExist(socialMedia.getPlatform())) {
-            throw new CustomException("Invalid platform", 400, Map.of("platform", socialMedia.getPlatform()));
+            throw new CustomException(
+                    "Invalid platform",
+                    400,
+                    Map.of(
+                            "platform", socialMedia.getPlatform()
+                    )
+            );
         }
         // create social media
         SocialMedia socialMediaModel = SocialMedia.builder()
@@ -51,7 +57,15 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     public SocialMediaResponse getSocialMediaById(String id) {
         // get social media by id
         SocialMedia socialMedia = socialMediaRepository.findById(id)
-                .orElseThrow(() -> new CustomException("Social media not found", 404, Map.of("id", id)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Social media not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
         // return social media
         return SocialMediaResponse.builder()
                 .id(socialMedia.getId())
@@ -82,10 +96,23 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     public SocialMediaResponse updateSocialMedia(String id, SocialMediaRequest socialMedia) {
         // get social media by id
         SocialMedia socialMediaModel = socialMediaRepository.findById(id)
-                .orElseThrow(() -> new CustomException("Social media not found", 404, Map.of("id", id)));
+                .orElseThrow(
+                        () -> new CustomException("Social media not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
         // check if social media enum is valid
         if (!PlatformEnum.isPlatformExist(socialMedia.getPlatform())) {
-            throw new CustomException("Invalid platform", 400, Map.of("platform", socialMedia.getPlatform()));
+            throw new CustomException(
+                    "Invalid platform",
+                    400,
+                    Map.of(
+                            "platform", socialMedia.getPlatform()
+                    )
+            );
         }
         // update social media
         socialMediaModel.setPlatform(PlatformEnum.valueOf(socialMedia.getPlatform()));
@@ -108,7 +135,13 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     public void deleteSocialMedia(String id) {
         // check if social media exists
         if (!socialMediaRepository.existsById(id)) {
-            throw new CustomException("Social media not found", 404, Map.of("id", id));
+            throw new CustomException(
+                    "Social media not found",
+                    404,
+                    Map.of(
+                            "id", id
+                    )
+            );
         }
         // delete social media
         socialMediaRepository.deleteById(id);
@@ -129,5 +162,20 @@ public class SocialMediaServiceImpl implements SocialMediaService {
                         .freelancerId(socialMedia.getFreelancerId())
                         .build())
                 .toList();
+    }
+
+    @Override
+    public SocialMedia getSocialMediaModelById(String id) {
+        // get social media by id
+        return socialMediaRepository.findById(id)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Social media not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
     }
 }

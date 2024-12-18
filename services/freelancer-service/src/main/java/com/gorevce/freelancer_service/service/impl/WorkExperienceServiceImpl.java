@@ -23,11 +23,24 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     public WorkExperienceResponse createWorkExperience(WorkExperienceRequest workExperience) {
         // check start date is before end date
         if (workExperience.getStartDate().after(workExperience.getEndDate())) {
-            throw new CustomException("Start date is after end date", 400, Map.of("startDate", workExperience.getStartDate(), "endDate", workExperience.getEndDate()));
+            throw new CustomException(
+                    "Start date is after end date",
+                    400,
+                    Map.of(
+                            "startDate", workExperience.getStartDate(),
+                            "endDate", workExperience.getEndDate()
+                    )
+            );
         }
         // check if start date is in the future
         if (workExperience.getStartDate().after(new java.util.Date())) {
-            throw new CustomException("Start date is in the future", 400, Map.of("startDate", workExperience.getStartDate()));
+            throw new CustomException(
+                    "Start date is in the future",
+                    400,
+                    Map.of(
+                            "startDate", workExperience.getStartDate()
+                    )
+            );
         }
         // create work experience
         WorkExperience workExperienceModel = WorkExperience.builder()
@@ -59,7 +72,15 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     public WorkExperienceResponse getWorkExperienceById(String id) {
         // get work experience by id
         WorkExperience workExperience = workExperienceRepository.findById(id)
-                .orElseThrow(() -> new CustomException("Work experience not found", 404, Map.of("id", id)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Work experience not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
         // return work experience
         return WorkExperienceResponse.builder()
                 .id(workExperience.getId())
@@ -94,15 +115,35 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     public WorkExperienceResponse updateWorkExperience(String id, WorkExperienceRequest workExperience) {
         // check start date is before end date
         if (workExperience.getStartDate().after(workExperience.getEndDate())) {
-            throw new CustomException("Start date is after end date", 400, Map.of("startDate", workExperience.getStartDate(), "endDate", workExperience.getEndDate()));
+            throw new CustomException(
+                    "Start date is after end date",
+                    400,
+                    Map.of(
+                            "startDate", workExperience.getStartDate(),
+                            "endDate", workExperience.getEndDate()
+                    )
+            );
         }
         // check if start date is in the future
         if (workExperience.getStartDate().after(new java.util.Date())) {
-            throw new CustomException("Start date is in the future", 400, Map.of("startDate", workExperience.getStartDate()));
+            throw new CustomException(
+                    "Start date is in the future",
+                    400,
+                    Map.of(
+                            "startDate", workExperience.getStartDate()
+                    )
+            );
         }
         // get work experience by id
         WorkExperience workExperienceModel = workExperienceRepository.findById(id)
-                .orElseThrow(() -> new CustomException("Work experience not found", 404, Map.of("id", id)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Work experience not found",
+                                404,
+                                Map.of(
+                                        "id", id)
+                        )
+                );
         // update work experience
         workExperienceModel.setTitle(workExperience.getTitle());
         workExperienceModel.setCompany(workExperience.getCompany());
@@ -131,7 +172,13 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     public void deleteWorkExperience(String id) {
         // check if work experience exists
         if (!workExperienceRepository.existsById(id)) {
-            throw new CustomException("Work experience not found", 404, Map.of("id", id));
+            throw new CustomException(
+                    "Work experience not found",
+                    404,
+                    Map.of(
+                            "id", id
+                    )
+            );
         }
         // delete work experience
         workExperienceRepository.deleteById(id);
@@ -159,7 +206,15 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     public WorkExperienceDetailsResponse getWorkExperienceDetailsById(String id) {
         // get work experience by id
         WorkExperience workExperience = workExperienceRepository.findById(id)
-                .orElseThrow(() -> new CustomException("Work experience not found", 404, Map.of("id", id)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Work experience not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
         // return work experience
         return WorkExperienceDetailsResponse.builder()
                 .id(workExperience.getId())
@@ -173,5 +228,20 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
                 .isCurrent(workExperience.isCurrent())
                 .freelancerId(workExperience.getFreelancerId())
                 .build();
+    }
+
+    @Override
+    public WorkExperience getWorkExperienceModelById(String id) {
+        // get work experience by id
+        return workExperienceRepository.findById(id)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Work experience not found",
+                                404,
+                                Map.of(
+                                        "id", id
+                                )
+                        )
+                );
     }
 }

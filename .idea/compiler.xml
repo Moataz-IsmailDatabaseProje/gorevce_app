@@ -8,19 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="freelancer-service" />
         <module name="authentication-service" />
         <module name="address-service" />
         <module name="discovery" />
         <module name="gateway" />
-      </profile>
-      <profile name="Annotation profile for freelancer-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="freelancer-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -29,7 +21,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="address-service" options="" />
+      <module name="address-service" options="-parameters" />
       <module name="authentication-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />

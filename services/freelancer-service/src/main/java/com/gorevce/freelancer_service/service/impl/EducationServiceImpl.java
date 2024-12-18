@@ -25,11 +25,25 @@ public class EducationServiceImpl implements EducationService {
     public EducationResponse createEducation(EducationRequest educationDto) {
         // check if start date is after end date
         if (educationDto.getStartDate().after(educationDto.getEndDate())) {
-            throw new CustomException("Start date cannot be after end date", 400, Map.of("startDate", educationDto.getStartDate(), "endDate", educationDto.getEndDate()));
+            throw new CustomException(
+                    "Start date cannot be after end date",
+                    400,
+                    Map.of(
+                        "startDate", educationDto.getStartDate(),
+                        "endDate", educationDto.getEndDate()
+
+                    )
+            );
         }
         // check if start date is after current date
         if (educationDto.getStartDate().after(new Date())) {
-            throw new CustomException("Start date cannot be in the future", 400, Map.of("startDate", educationDto.getStartDate()));
+            throw new CustomException(
+                    "Start date cannot be in the future",
+                    400,
+                    Map.of(
+                        "startDate", educationDto.getStartDate()
+                    )
+            );
         }
         // create education
         Education education = Education.builder()
@@ -68,7 +82,15 @@ public class EducationServiceImpl implements EducationService {
     public EducationResponse getEducation(String educationId) {
         // get education
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new CustomException("Education not found", 404, Map.of("educationId", educationId)));
+                .orElseThrow(
+                    () -> new CustomException(
+                        "Education not found",
+                        404,
+                        Map.of(
+                                "educationId", educationId
+                        )
+                    )
+                );
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(education.getStartDate());
         String startYear = String.valueOf(calendar.get(Calendar.YEAR));
@@ -91,15 +113,36 @@ public class EducationServiceImpl implements EducationService {
     public EducationResponse updateEducation(String educationId, EducationRequest educationDto) {
         // check if start date is after end date
         if (educationDto.getStartDate().after(educationDto.getEndDate())) {
-            throw new CustomException("Start date cannot be after end date", 400, Map.of("startDate", educationDto.getStartDate(), "endDate", educationDto.getEndDate()));
+            throw new CustomException(
+                    "Start date cannot be after end date",
+                    400,
+                    Map.of(
+                        "startDate", educationDto.getStartDate(),
+                        "endDate", educationDto.getEndDate()
+                    )
+            );
         }
         // check if start date is after current date
         if (educationDto.getStartDate().after(new Date())) {
-            throw new CustomException("Start date cannot be in the future", 400, Map.of("startDate", educationDto.getStartDate()));
+            throw new CustomException(
+                    "Start date cannot be in the future",
+                    400,
+                    Map.of(
+                        "startDate", educationDto.getStartDate()
+                    )
+            );
         }
         // get education
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new CustomException("Education not found", 404, Map.of("educationId", educationId)));
+                .orElseThrow(
+                    () -> new CustomException(
+                        "Education not found",
+                        404,
+                        Map.of(
+                            "educationId", educationId
+                        )
+                    )
+                );
         // update education
         education.setSchool(educationDto.getSchool());
         education.setDegree(educationDto.getDegree());
@@ -135,7 +178,15 @@ public class EducationServiceImpl implements EducationService {
     public void deleteEducation(String educationId) {
         // get education
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new CustomException("Education not found", 404, Map.of("educationId", educationId)));
+                .orElseThrow(
+                    () -> new CustomException(
+                        "Education not found",
+                        404,
+                        Map.of(
+                            "educationId", educationId
+                        )
+                    )
+                );
         // delete education
         educationRepository.delete(education);
     }
@@ -196,7 +247,15 @@ public class EducationServiceImpl implements EducationService {
     public EducationDetailsResponse getEducationDetails(String educationId) {
         // get education
         Education education = educationRepository.findById(educationId)
-                .orElseThrow(() -> new CustomException("Education not found", 404, Map.of("educationId", educationId)));
+                .orElseThrow(
+                    () -> new CustomException(
+                        "Education not found",
+                        404,
+                        Map.of(
+                            "educationId", educationId
+                        )
+                    )
+                );
         // return education
         return EducationDetailsResponse.builder()
                 .id(education.getId())
@@ -211,5 +270,19 @@ public class EducationServiceImpl implements EducationService {
                 .imageUrl(education.getImageUrl())
                 .freelancerId(education.getFreelancerId())
                 .build();
+    }
+
+    @Override
+    public Education getEducationModelById(String id) {
+        return educationRepository.findById(id)
+                .orElseThrow(
+                    () -> new CustomException(
+                        "Education not found",
+                        404,
+                        Map.of(
+                            "educationId", id
+                        )
+                    )
+                );
     }
 }

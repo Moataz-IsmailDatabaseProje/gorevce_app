@@ -3,6 +3,7 @@ package com.gorevce.freelancer_service.service;
 import com.gorevce.freelancer_service.dto.request.EducationRequest;
 import com.gorevce.freelancer_service.dto.response.EducationDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.EducationResponse;
+import com.gorevce.freelancer_service.model.Education;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface EducationService {
     public List<EducationResponse> getEducationsByFreelancer(String freelancerId);
     
     public EducationDetailsResponse getEducationDetails(String educationId);
-    
-    
+
+
+    Education getEducationModelById(String id);
 }

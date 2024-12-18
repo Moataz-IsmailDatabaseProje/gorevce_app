@@ -137,7 +137,7 @@ public class ReviewController {
     }
 
     // get reviews by freelancer
-    @GetMapping("/get-reviews-by-freelacer")
+    @GetMapping("/get-reviews-by-freelancer")
     public ResponseEntity<?> getReviewsByFreelancer(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(

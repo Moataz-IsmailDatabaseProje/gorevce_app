@@ -2,6 +2,7 @@ package com.gorevce.freelancer_service.service;
 
 import com.gorevce.freelancer_service.dto.request.SocialMediaRequest;
 import com.gorevce.freelancer_service.dto.response.SocialMediaResponse;
+import com.gorevce.freelancer_service.model.SocialMedia;
 
 import java.util.List;
 
@@ -26,4 +27,5 @@ public interface SocialMediaService {
     List<SocialMediaResponse> getAllSocialMedia();
 
 
+    SocialMedia getSocialMediaModelById(String id);
 }

@@ -48,9 +48,17 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse getReview(String reviewId) {
         // get review
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new CustomException("Review not found",404, Map.of("reviewId",reviewId))
-        );
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Review not found",
+                                404,
+                                Map.of(
+                                        "reviewId",reviewId
+                                )
+                        )
+
+                );
         // return review
         return ReviewResponse.builder()
                 .id(review.getId())
@@ -66,9 +74,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse updateReview(String reviewId, ReviewRequest reviewDto) {
         // get review
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new CustomException("Review not found",404, Map.of("reviewId",reviewId))
-        );
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Review not found",
+                                404,
+                                Map.of(
+                                        "reviewId",reviewId
+                                )
+                        )
+                );
         // update review
         review.setReviewerId(reviewDto.getReviewerId());
         review.setFreelancerId(reviewDto.getFreelancerId());
@@ -93,10 +108,17 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(String reviewId) {
         // get review
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new CustomException("Review not found", 404, Map.of("reviewId", reviewId)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Review not found",
+                                404,
+                                Map.of(
+                                        "reviewId", reviewId
+                                )
+                        )
+                );
         // delete review
         reviewRepository.delete(review);
-
     }
 
     @Override

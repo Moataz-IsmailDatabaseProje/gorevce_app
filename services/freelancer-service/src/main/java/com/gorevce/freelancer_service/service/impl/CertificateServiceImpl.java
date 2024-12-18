@@ -24,10 +24,23 @@ public class CertificateServiceImpl implements CertificateService {
     public CertificateResponse createCertificate(CertificateRequest certificateDto) {
         // check issueDate and expirationDate
         if (certificateDto.getIssueDate().after(certificateDto.getExpirationDate())) {
-            throw new CustomException("Issue date cannot be after expiration date", 400, Map.of("issueDate", certificateDto.getIssueDate(), "expirationDate", certificateDto.getExpirationDate()));
+            throw new CustomException(
+                    "Issue date cannot be after expiration date",
+                    400,
+                    Map.of(
+                            "issueDate", certificateDto.getIssueDate(),
+                            "expirationDate", certificateDto.getExpirationDate()
+                    )
+            );
         }
         if (certificateDto.getIssueDate().before(new Date())) {
-            throw new CustomException("Issue date cannot be in the past", 400, Map.of("issueDate", certificateDto.getIssueDate()));
+            throw new CustomException(
+                    "Issue date cannot be in the past",
+                    400,
+                    Map.of(
+                            "issueDate", certificateDto.getIssueDate()
+                    )
+            );
         }
         // create certificate
         Certificate certificate = Certificate.builder()
@@ -55,10 +68,17 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public CertificateResponse getCertificate(String certificateId) {
+    public CertificateResponse getCertificateById(String certificateId) {
         // get certificate
         Certificate certificate = certificateRepository.findById(certificateId)
-                .orElseThrow(() -> new CustomException("Certificate not found", 404, Map.of("certificateId", certificateId)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Certificate not found",
+                                404,
+                                Map.of(
+                                        "certificateId", certificateId)
+                        )
+                );
         // return certificate
         return CertificateResponse.builder()
                 .id(certificate.getId())
@@ -74,13 +94,34 @@ public class CertificateServiceImpl implements CertificateService {
     public CertificateResponse updateCertificate(String certificateId, CertificateRequest certificateDto) {
         // get certificate
         Certificate certificate = certificateRepository.findById(certificateId)
-                .orElseThrow(() -> new CustomException("Certificate not found", 404, Map.of("certificateId", certificateId)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Certificate not found",
+                                404,
+                                Map.of(
+                                        "certificateId", certificateId
+                                )
+                        )
+                );
         // check issueDate and expirationDate
         if (certificateDto.getIssueDate().after(certificateDto.getExpirationDate())) {
-            throw new CustomException("Issue date cannot be after expiration date", 400, Map.of("issueDate", certificateDto.getIssueDate(), "expirationDate", certificateDto.getExpirationDate()));
+            throw new CustomException(
+                    "Issue date cannot be after expiration date",
+                    400,
+                    Map.of(
+                            "issueDate", certificateDto.getIssueDate(),
+                            "expirationDate", certificateDto.getExpirationDate()
+                    )
+            );
         }
         if (certificateDto.getIssueDate().before(new Date())) {
-            throw new CustomException("Issue date cannot be in the past", 400, Map.of("issueDate", certificateDto.getIssueDate()));
+            throw new CustomException(
+                    "Issue date cannot be in the past",
+                    400,
+                    Map.of(
+                            "issueDate", certificateDto.getIssueDate()
+                    )
+            );
         }
         // update certificate
         certificate.setName(certificateDto.getName());
@@ -109,7 +150,15 @@ public class CertificateServiceImpl implements CertificateService {
     public void deleteCertificate(String certificateId) {
         // get certificate
         Certificate certificate = certificateRepository.findById(certificateId)
-                .orElseThrow(() -> new CustomException("Certificate not found", 404, Map.of("certificateId", certificateId)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Certificate not found",
+                                404,
+                                Map.of(
+                                        "certificateId", certificateId
+                                )
+                        )
+                );
         // delete certificate
         certificateRepository.delete(certificate);
     }
@@ -152,7 +201,16 @@ public class CertificateServiceImpl implements CertificateService {
     public CertificateDetailsResponse getCertificateDetails(String certificateId) {
         // get certificate
         Certificate certificate = certificateRepository.findById(certificateId)
-                .orElseThrow(() -> new CustomException("Certificate not found", 404, Map.of("certificateId", certificateId)));
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Certificate not found",
+                                404,
+                                Map.of(
+                                        "certificateId", certificateId
+                                )
+                        )
+                );
+
         // return certificate
         return CertificateDetailsResponse.builder()
                 .id(certificate.getId())
@@ -165,5 +223,20 @@ public class CertificateServiceImpl implements CertificateService {
                 .credentialUrl(certificate.getCredentialUrl())
                 .imageUrl(certificate.getImageUrl())
                 .build();
+    }
+
+    @Override
+    public Certificate getCertificateModelById(String id) {
+        // get certificate
+        return certificateRepository.findById(id)
+
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Certificate not found",
+                                404,
+                                Map.of(
+                                        "certificateId", id)
+                        )
+                );
     }
 }

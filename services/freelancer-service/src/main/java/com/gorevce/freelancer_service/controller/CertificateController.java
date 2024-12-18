@@ -48,7 +48,7 @@ public class CertificateController {
                     ApiResponse.builder()
                             .message("Certificate retrieved successfully")
                             .httpStatusCode(200)
-                            .response(certificateService.getCertificate(id))
+                            .response(certificateService.getCertificateById(id))
                             .build()
             );
         } catch (CustomException e) {

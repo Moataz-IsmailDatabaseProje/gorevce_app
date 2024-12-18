@@ -18,4 +18,6 @@ public interface EndpointPermissionService {
     PermissionResponse updatePermission(String permissionId, PermissionRequest updatePermissionRequest);
 
     PermissionResponse getPermissionById(String permissionId);
+
+    PermissionResponse permissionByEndpointAndHttpMethod(String endpoint, String httpMethod);
 }

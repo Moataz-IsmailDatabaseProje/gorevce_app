@@ -33,4 +33,6 @@ public interface AuthService {
     UserInfoResponse changeUsername(ChangeUsernameRequest changeUsernameRequest, String token);
 
     UserInfoResponse setRoleToUser(String userId, String roleId);
+
+    UserInfoResponse getUserInfoResponseById(String userId);
 }
