@@ -113,7 +113,7 @@ public class ReviewController {
     }
 
     // get all reviews
-    @GetMapping("/get-reviews")
+    @GetMapping("/get-all-reviews")
     public ResponseEntity<?> getReviews() {
         try {
             return ResponseEntity.ok().body(
@@ -137,7 +137,7 @@ public class ReviewController {
     }
 
     // get reviews by freelancer
-    @GetMapping("/get-reviews-by-freelancer")
+    @GetMapping("/get-reviews")
     public ResponseEntity<?> getReviewsByFreelancer(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(

@@ -3,12 +3,14 @@ package com.gorevce.freelancer_service.service.impl;
 
 import com.gorevce.freelancer_service.dto.request.SocialMediaRequest;
 import com.gorevce.freelancer_service.dto.response.SocialMediaResponse;
+import com.gorevce.freelancer_service.event.added.SocialMediaAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.SocialMedia;
 import com.gorevce.freelancer_service.model.enums.PlatformEnum;
 import com.gorevce.freelancer_service.repository.SocialMediaRepository;
 import com.gorevce.freelancer_service.service.SocialMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class SocialMediaServiceImpl implements SocialMediaService {
     @Autowired
     private SocialMediaRepository socialMediaRepository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public SocialMediaResponse createSocialMedia(SocialMediaRequest socialMedia) {
@@ -34,15 +38,26 @@ public class SocialMediaServiceImpl implements SocialMediaService {
                     )
             );
         }
+        // check if freelancer id is null
+        if (socialMedia.getFreelancerId() == null) {
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                            "freelancerId", "null"
+                    )
+            );
+        }
         // create social media
         SocialMedia socialMediaModel = SocialMedia.builder()
-                .platform(PlatformEnum.valueOf(socialMedia.getPlatform()))
+                .platform(PlatformEnum.valueOf(socialMedia.getPlatform().toUpperCase()))
                 .url(socialMedia.getUrl())
                 .imageUrl(socialMedia.getImageUrl())
                 .freelancerId(socialMedia.getFreelancerId())
                 .build();
         // save social media to database
         SocialMedia saved = socialMediaRepository.save(socialMediaModel);
+        eventPublisher.publishEvent(new SocialMediaAddedEvent(this, saved.getFreelancerId(), saved.getId()));
         // return social media
         return SocialMediaResponse.builder()
                 .id(saved.getId())
@@ -105,7 +120,7 @@ public class SocialMediaServiceImpl implements SocialMediaService {
                         )
                 );
         // check if social media enum is valid
-        if (!PlatformEnum.isPlatformExist(socialMedia.getPlatform())) {
+        if (!PlatformEnum.isPlatformExist(socialMedia.getPlatform().toUpperCase())) {
             throw new CustomException(
                     "Invalid platform",
                     400,
@@ -114,6 +129,7 @@ public class SocialMediaServiceImpl implements SocialMediaService {
                     )
             );
         }
+
         // update social media
         socialMediaModel.setPlatform(PlatformEnum.valueOf(socialMedia.getPlatform()));
         socialMediaModel.setUrl(socialMedia.getUrl());

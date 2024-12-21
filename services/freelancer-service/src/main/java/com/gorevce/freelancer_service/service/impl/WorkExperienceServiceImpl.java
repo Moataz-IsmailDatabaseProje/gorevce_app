@@ -3,11 +3,14 @@ package com.gorevce.freelancer_service.service.impl;
 import com.gorevce.freelancer_service.dto.request.WorkExperienceRequest;
 import com.gorevce.freelancer_service.dto.response.WorkExperienceDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.WorkExperienceResponse;
+import com.gorevce.freelancer_service.event.added.WorkExperienceAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.WorkExperience;
 import com.gorevce.freelancer_service.repository.WorkExperienceRepository;
+import com.gorevce.freelancer_service.service.FreelancerService;
 import com.gorevce.freelancer_service.service.WorkExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
 
     @Autowired
     private WorkExperienceRepository workExperienceRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public WorkExperienceResponse createWorkExperience(WorkExperienceRequest workExperience) {
@@ -42,6 +48,16 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
                     )
             );
         }
+        // check if freelancer id is not null
+        if (workExperience.getFreelancerId() == null) {
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                            "freelancerId", "null"
+                    )
+            );
+        }
         // create work experience
         WorkExperience workExperienceModel = WorkExperience.builder()
                 .title(workExperience.getTitle())
@@ -56,6 +72,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
                 .build();
         // save work experience to database
         WorkExperience saved = workExperienceRepository.save(workExperienceModel);
+        eventPublisher.publishEvent(new WorkExperienceAddedEvent(this, saved.getFreelancerId(), saved.getId()));
         // return work experience
         return WorkExperienceResponse.builder()
                 .id(saved.getId())

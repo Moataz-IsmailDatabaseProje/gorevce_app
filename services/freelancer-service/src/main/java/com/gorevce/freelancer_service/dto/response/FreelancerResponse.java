@@ -19,12 +19,12 @@ public class FreelancerResponse {
     private String email;
     private String phoneNumber;
     private Map<String,Integer> skills;
-    private List<String> certificatesId;
-    private List<String> projectsId;
-    private List<String> reviewsId;
-    private List<String> educationId;
-    private List<String> workExperienceId;
-    private List<String> socialMediaId;
+    private Set<String> certificatesId;
+    private Set<String> projectsId;
+    private Set<String> reviewsId;
+    private Set<String> educationId;
+    private Set<String> workExperienceId;
+    private Set<String> socialMediaId;
 
     private String addressId;
     private String UserId;

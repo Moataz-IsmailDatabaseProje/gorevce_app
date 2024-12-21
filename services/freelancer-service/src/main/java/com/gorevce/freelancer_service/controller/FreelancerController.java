@@ -182,7 +182,52 @@ public class FreelancerController {
     }
 
     // get user by id
+    @GetMapping("/get-credentials")
+    public ResponseEntity<?> getUserById(@RequestParam String id) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("User retrieved successfully")
+                            .httpStatusCode(200)
+                            .response(freelancerService.getUserById(id))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            ApiResponse.builder()
+                                    .message(e.getMessage())
+                                    .httpStatusCode(e.getHttpStatusCode())
+                                    .response(e.getDetails())
+                                    .build()
+                    );
+        }
+    }
     // get freelancer address by id
+    @GetMapping("/get-address")
+    public ResponseEntity<?> getAddressById(@RequestParam String id) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Address retrieved successfully")
+                            .httpStatusCode(200)
+                            .response(freelancerService.getAddressById(id))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            ApiResponse.builder()
+                                    .message(e.getMessage())
+                                    .httpStatusCode(e.getHttpStatusCode())
+                                    .response(e.getDetails())
+                                    .build()
+                    );
+        }
+    }
+
     // get freelancer work experience by id
     @GetMapping("/get-work-experience")
     public ResponseEntity<?> getWorkExperienceById(@RequestParam String id) {

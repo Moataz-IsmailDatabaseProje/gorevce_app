@@ -3,13 +3,16 @@ package com.gorevce.freelancer_service.service.impl;
 import com.gorevce.freelancer_service.dto.request.ProjectRequest;
 import com.gorevce.freelancer_service.dto.response.ProjectDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.ProjectResponse;
+import com.gorevce.freelancer_service.event.added.ProjectAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.Project;
 import com.gorevce.freelancer_service.repository.ProjectRepository;
 import com.gorevce.freelancer_service.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +22,45 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
     public ProjectResponse createProject(ProjectRequest projectDto) {
+        // check date range
+        if(projectDto.getProjectStartDate().after(projectDto.getProjectEndDate())){
+            throw new CustomException(
+                    "Project start date must be before project end date",
+                    400,
+                    Map.of(
+                            "projectStartDate",projectDto.getProjectStartDate().toString(),
+                            "projectEndDate",projectDto.getProjectEndDate().toString()
+                    )
+            );
+        }
+        // check project is not in the future
+        if(projectDto.getProjectStartDate().after(new Date())){
+            throw new CustomException(
+                    "Project start date must be in the past",
+                    400,
+                    Map.of(
+                            "projectStartDate",projectDto.getProjectStartDate().toString()
+                    )
+            );
+        }
+        // check freelancer id is not null
+        if(projectDto.getFreelancerId() == null){
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                            "freelancerId","null"
+                    )
+            );
+        }
+
+
+
         // create project
         Project project = Project.builder()
                 .name(projectDto.getName())
@@ -35,6 +75,14 @@ public class ProjectServiceImpl implements ProjectService {
                 .build();
         // save project
         Project savedProject = projectRepository.save(project);
+        // publish project added event
+        eventPublisher.publishEvent(
+                new ProjectAddedEvent(
+                        this,
+                        savedProject.getFreelancerId(),
+                        savedProject.getId()
+                )
+        );
         // return project
         return ProjectResponse.builder()
                 .id(savedProject.getId())

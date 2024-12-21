@@ -3,11 +3,13 @@ package com.gorevce.freelancer_service.service.impl;
 import com.gorevce.freelancer_service.dto.request.CertificateRequest;
 import com.gorevce.freelancer_service.dto.response.CertificateDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.CertificateResponse;
+import com.gorevce.freelancer_service.event.added.CertificateAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.Certificate;
 import com.gorevce.freelancer_service.repository.CertificateRepository;
 import com.gorevce.freelancer_service.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +21,9 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Autowired
     private CertificateRepository certificateRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public CertificateResponse createCertificate(CertificateRequest certificateDto) {
@@ -33,12 +38,22 @@ public class CertificateServiceImpl implements CertificateService {
                     )
             );
         }
-        if (certificateDto.getIssueDate().before(new Date())) {
+        if (certificateDto.getIssueDate().after(new Date())) {
             throw new CustomException(
-                    "Issue date cannot be in the past",
+                    "Issue date cannot be in the future",
                     400,
                     Map.of(
                             "issueDate", certificateDto.getIssueDate()
+                    )
+            );
+        }
+        // check if freelancer is not null
+        if (certificateDto.getFreelancerId() == null) {
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                            "freelancerId", "null"
                     )
             );
         }
@@ -56,6 +71,13 @@ public class CertificateServiceImpl implements CertificateService {
                 .build();
         // save certificate
         Certificate savedCertificate = certificateRepository.save(certificate); // save certificate
+        eventPublisher.publishEvent(
+                new CertificateAddedEvent(
+                        this,
+                        certificateDto.getFreelancerId(),
+                        savedCertificate.getId()
+                )
+        );
         // return certificate
         return CertificateResponse.builder()
                 .id(savedCertificate.getId())
@@ -114,9 +136,9 @@ public class CertificateServiceImpl implements CertificateService {
                     )
             );
         }
-        if (certificateDto.getIssueDate().before(new Date())) {
+        if (certificateDto.getIssueDate().after(new Date())) {
             throw new CustomException(
-                    "Issue date cannot be in the past",
+                    "Issue date cannot be in the future",
                     400,
                     Map.of(
                             "issueDate", certificateDto.getIssueDate()

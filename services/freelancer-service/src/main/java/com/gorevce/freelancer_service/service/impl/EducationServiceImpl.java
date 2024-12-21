@@ -3,11 +3,13 @@ package com.gorevce.freelancer_service.service.impl;
 import com.gorevce.freelancer_service.dto.request.EducationRequest;
 import com.gorevce.freelancer_service.dto.response.EducationDetailsResponse;
 import com.gorevce.freelancer_service.dto.response.EducationResponse;
+import com.gorevce.freelancer_service.event.added.EducationAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.Education;
 import com.gorevce.freelancer_service.repository.EducationRepository;
 import com.gorevce.freelancer_service.service.EducationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -20,6 +22,9 @@ public class EducationServiceImpl implements EducationService {
 
     @Autowired
     private EducationRepository educationRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public EducationResponse createEducation(EducationRequest educationDto) {
@@ -45,6 +50,16 @@ public class EducationServiceImpl implements EducationService {
                     )
             );
         }
+        // check if freelancer is not null
+        if (educationDto.getFreelancerId() == null) {
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                        "freelancerId", "null"
+                    )
+            );
+        }
         // create education
         Education education = Education.builder()
                 .school(educationDto.getSchool())
@@ -60,6 +75,13 @@ public class EducationServiceImpl implements EducationService {
                 .build();
         // save education
         Education savedEducation = educationRepository.save(education); // save education
+        eventPublisher.publishEvent(
+                new EducationAddedEvent(
+                        this,
+                        savedEducation.getId(),
+                        savedEducation.getFreelancerId()
+                )
+        );
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(savedEducation.getStartDate());
         String startYear = String.valueOf(calendar.get(Calendar.YEAR));

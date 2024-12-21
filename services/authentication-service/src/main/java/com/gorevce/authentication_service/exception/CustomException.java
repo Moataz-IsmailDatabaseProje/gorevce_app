@@ -1,7 +1,11 @@
 package com.gorevce.authentication_service.exception;
 
+import lombok.*;
+
 import java.util.Map;
 
+@Getter
+@Setter
 public class CustomException extends RuntimeException {
     private final int httpStatusCode;
     private final Map<String, Object> details;

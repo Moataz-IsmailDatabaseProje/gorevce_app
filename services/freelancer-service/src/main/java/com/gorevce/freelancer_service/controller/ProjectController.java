@@ -40,8 +40,8 @@ public class ProjectController {
     }
 
     // get project by id
-    @PostMapping("/get-project")
-    public ResponseEntity<?> getProjectById(@RequestBody String id) {
+    @GetMapping("/get-project")
+    public ResponseEntity<?> getProjectById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
@@ -112,7 +112,7 @@ public class ProjectController {
     }
 
     // get all projects
-    @GetMapping("/get-projects")
+    @GetMapping("/get-all-projects")
     public ResponseEntity<?> getProjects() {
         try {
             return ResponseEntity.ok().body(
@@ -136,7 +136,7 @@ public class ProjectController {
     }
 
     // get all projects by freelancer
-    @GetMapping("/get-projects-by-freelancer")
+    @GetMapping("/get-projects")
     public ResponseEntity<?> getProjectsByFreelancer(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(

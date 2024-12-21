@@ -1,5 +1,6 @@
 package com.gorevce.freelancer_service.dto.request;
 
+import com.gorevce.freelancer_service.dto.AddressDto;
 import com.gorevce.freelancer_service.dto.response.*;
 import lombok.*;
 
@@ -23,6 +24,6 @@ public class FreelancerRequest {
     private Set<WorkExperienceRequest> workExperience;
     private Set<SocialMediaRequest> socialMedia;
 
-    private String addressId;
+    private AddressDto address;
     private String UserId;
 }

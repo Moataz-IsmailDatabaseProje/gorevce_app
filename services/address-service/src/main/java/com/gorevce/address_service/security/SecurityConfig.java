@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> {
                             auth.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
+                            auth.requestMatchers("/address/rest-template/**").permitAll();
                             auth.anyRequest().authenticated();
                         }
                 );

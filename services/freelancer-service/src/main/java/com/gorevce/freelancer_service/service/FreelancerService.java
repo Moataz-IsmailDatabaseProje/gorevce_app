@@ -55,5 +55,4 @@ public interface FreelancerService {
 
     // restore freelancer by id
     void restoreFreelancerById(String id);
-
 }

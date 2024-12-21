@@ -22,12 +22,12 @@ public class Freelancer {
     private String email;
     private String phoneNumber;
     private Map<String,Integer> skills;
-    private Set<Certificate> certificates;
-    private Set<Project> projects;
-    private Set<Review> reviews;
-    private Set<Education> education;
-    private Set<WorkExperience> workExperience;
-    private Set<SocialMedia> socialMedia;
+    private Set<String> certificates;
+    private Set<String> projects;
+    private Set<String> reviews;
+    private Set<String> education;
+    private Set<String> workExperience;
+    private Set<String> socialMedia;
     private Boolean isDeleted;
 
     private String addressId;

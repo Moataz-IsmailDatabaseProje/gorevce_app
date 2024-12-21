@@ -177,4 +177,25 @@ public class AddressController {
                     );
         }
     }
+
+    // create address for rest template call
+    @PostMapping("/rest-template/create-address")
+    ResponseEntity<?> createAddressForRestTemplate(@RequestBody AddressRequest addressRequest) {
+        try {
+            return ResponseEntity.ok(
+                    addressService.createAddress(addressRequest)
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+
+    }
 }

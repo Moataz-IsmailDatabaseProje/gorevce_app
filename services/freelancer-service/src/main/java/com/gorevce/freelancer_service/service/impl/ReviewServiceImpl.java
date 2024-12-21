@@ -2,11 +2,13 @@ package com.gorevce.freelancer_service.service.impl;
 
 import com.gorevce.freelancer_service.dto.request.ReviewRequest;
 import com.gorevce.freelancer_service.dto.response.ReviewResponse;
+import com.gorevce.freelancer_service.event.added.ReviewAddedEvent;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.model.Review;
 import com.gorevce.freelancer_service.repository.ReviewRepository;
 import com.gorevce.freelancer_service.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,8 +21,23 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
     public ReviewResponse createReview(ReviewRequest reviewDto) {
+
+        // check freelancer id is not null
+        if(reviewDto.getFreelancerId() == null){
+            throw new CustomException(
+                    "Freelancer id is required",
+                    400,
+                    Map.of(
+                            "freelancerId","null"
+                    )
+            );
+        }
+
         // create review
         Review review = Review.builder()
                 .reviewerId(reviewDto.getReviewerId())
@@ -32,6 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
         // save review
         Review savedReview = reviewRepository.save(review); // save review
+        eventPublisher.publishEvent(new ReviewAddedEvent(this, savedReview.getFreelancerId(), savedReview.getId()));
         // return review
         return ReviewResponse.builder()
                 .id(savedReview.getId())

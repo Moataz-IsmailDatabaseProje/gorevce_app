@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,20 @@ public class FreelancerServiceImpl implements FreelancerService {
     private String addressServiceUrl;
     @Override
     public FreelancerResponse createFreelancer(FreelancerRequest freelancer) {
+        // check if freelancer has user
+        if (freelancer.getUserId() != null) {
+            // get user from authentication service
+            UserDto user = restTemplate.getForObject(authenticationServiceUrl + "/auth/rest-template/get-user/" + freelancer.getUserId(), UserDto.class);
+
+        }else {
+            throw new CustomException(
+                    "User not found",
+                    404,
+                    Map.of(
+                            "id", "null"
+                    )
+            );
+        }
         // create freelancer
         Freelancer newFreelancer = Freelancer.builder()
                 .name(freelancer.getName())
@@ -55,85 +70,102 @@ public class FreelancerServiceImpl implements FreelancerService {
                 .phoneNumber(freelancer.getPhoneNumber())
                 .skills(freelancer.getSkills())
                 .UserId(freelancer.getUserId())
+                .certificates(new HashSet<>())
+                .workExperience(new HashSet<>())
+                .projects(new HashSet<>())
+                .education(new HashSet<>())
+                .socialMedia(new HashSet<>())
+                .addressId(null)
                 .isDeleted(false)
                 .build();
         // save freelancer to database
         Freelancer saved = freelancerRepository.save(newFreelancer);
+        // check if freelancer has address
+        if (freelancer.getAddress() != null) {
+            freelancer.getAddress().setAddressOfId(saved.getId());
+            // send address to address service
+            AddressDto address = restTemplate.postForObject(addressServiceUrl + "/rest-template/create-address", freelancer.getAddress(), AddressDto.class);
+            // set address id to freelancer
+            assert address != null;
+            saved.setAddressId(address.getId());
+        }
         // check if freelancer has certificates
         if (freelancer.getCertificates() != null && !freelancer.getCertificates().isEmpty()) {
             // create certificates
-            freelancer.getCertificates().forEach(certificate -> {
-                CertificateResponse certificateResponse = certificateService.createCertificate(certificate);
-                // get certificate object by id from service
-                Certificate certificateModel = certificateService.getCertificateModelById(certificateResponse.getId());
-                // add certificate to freelancer
-                saved.getCertificates().add(certificateModel);
-            });
+            freelancer.getCertificates().forEach(
+                    certificateRequest -> {
+                        certificateRequest.setFreelancerId(saved.getId());
+                        CertificateResponse certificateResponse = certificateService.createCertificate(certificateRequest);
+                        // add certificate id to freelancer
+                         saved.getCertificates().add(certificateResponse.getId());
+                    }
+            );
         }
         // check if freelancer has work experiences
         if (freelancer.getWorkExperience() != null && !freelancer.getWorkExperience().isEmpty()) {
             // create work experiences
-            freelancer.getWorkExperience().forEach(workExperience -> {
-                WorkExperienceResponse workExperienceResponse = workExperienceService.createWorkExperience(workExperience);
-                workExperienceResponse.setFreelancerId(saved.getId());
-                // get work experience object by id from service
-                WorkExperience workExperienceModel = workExperienceService.getWorkExperienceModelById(workExperienceResponse.getId());
-                // add work experience to freelancer
-                saved.getWorkExperience().add(workExperienceModel);
-            });
+            freelancer.getWorkExperience().forEach(
+                    workExperienceRequest -> {
+                        workExperienceRequest.setFreelancerId(saved.getId());
+                        WorkExperienceResponse workExperienceResponse = workExperienceService.createWorkExperience(workExperienceRequest);
+                        // add work experience id to freelancer
+                         saved.getWorkExperience().add(workExperienceResponse.getId());
+                    }
+            );
         }
         // check if freelancer has projects
         if (freelancer.getProjects() != null && !freelancer.getProjects().isEmpty()) {
             // create projects
-            freelancer.getProjects().forEach(project -> {
-                ProjectResponse projectResponse = projectService.createProject(project);
-                projectResponse.setFreelancerId(saved.getId());
-                // get project object by id from service
-                Project projectModel = projectService.getProjectModelById(projectResponse.getId());
-                // add project to freelancer
-                saved.getProjects().add(projectModel);
-            });
+            freelancer.getProjects().forEach(
+                    projectRequest -> {
+                        projectRequest.setFreelancerId(saved.getId());
+                        ProjectResponse projectResponse = projectService.createProject(projectRequest);
+                        // add project id to freelancer
+                         saved.getProjects().add(projectResponse.getId());
+                    }
+            );
         }
         // check if freelancer has education
         if (freelancer.getEducation() != null && !freelancer.getEducation().isEmpty()) {
             // create education
-            freelancer.getEducation().forEach(education -> {
-                EducationResponse educationResponse = educationService.createEducation(education);
-                educationResponse.setFreelancerId(saved.getId());
-                // get education object by id from service
-                Education educationModel = educationService.getEducationModelById(educationResponse.getId());
-                // add education to freelancer
-                saved.getEducation().add(educationModel);
-            });
+            freelancer.getEducation().forEach(
+                    educationRequest -> {
+                        educationRequest.setFreelancerId(saved.getId());
+                        EducationResponse educationResponse = educationService.createEducation(educationRequest);
+                        // add education id to freelancer
+                         saved.getEducation().add(educationResponse.getId());
+                    }
+            );
         }
-        // check if freelancer has SocialMedia
-        if (freelancer.getSocialMedia() != null && !freelancer.getSocialMedia().isEmpty()){
+        // check if freelancer has social media
+        if (freelancer.getSocialMedia() != null && !freelancer.getSocialMedia().isEmpty()) {
             // create social media
-            freelancer.getSocialMedia().forEach(socialMedia -> {
-                SocialMediaResponse socialMediaResponse = socialMediaService.createSocialMedia(socialMedia);
-                socialMediaResponse.setFreelancerId(saved.getId());
-                // get social media object by id from service
-                SocialMedia socialMediaModel = socialMediaService.getSocialMediaModelById(socialMediaResponse.getId());
-                // add social media to freelancer
-                saved.getSocialMedia().add(socialMediaModel);
-            });
+            freelancer.getSocialMedia().forEach(
+                    socialMediaRequest -> {
+                        socialMediaRequest.setFreelancerId(saved.getId());
+                        SocialMediaResponse socialMediaResponse = socialMediaService.createSocialMedia(socialMediaRequest);
+                        // add social media id to freelancer
+                         saved.getSocialMedia().add(socialMediaResponse.getId());
+                    }
+            );
         }
         // save freelancer to database
-        freelancerRepository.save(saved);
+        Freelancer lastSaved = freelancerRepository.save(saved);
         // return freelancer
         return FreelancerResponse.builder()
-                .id(saved.getId())
-                .name(saved.getName())
-                .surname(saved.getSurname())
-                .email(saved.getEmail())
-                .phoneNumber(saved.getPhoneNumber())
-                .skills(saved.getSkills())
-                .UserId(saved.getUserId())
-                .certificatesId(saved.getCertificates().stream().map(Certificate::getId).toList())
-                .workExperienceId(saved.getWorkExperience().stream().map(WorkExperience::getId).toList())
-                .projectsId(saved.getProjects().stream().map(Project::getId).toList())
-                .educationId(saved.getEducation().stream().map(Education::getId).toList())
-                .socialMediaId(saved.getSocialMedia().stream().map(SocialMedia::getId).toList())
+                .id(lastSaved.getId())
+                .name(lastSaved.getName())
+                .surname(lastSaved.getSurname())
+                .email(lastSaved.getEmail())
+                .phoneNumber(lastSaved.getPhoneNumber())
+                .skills(lastSaved.getSkills())
+                .UserId(lastSaved.getUserId())
+                .certificatesId(lastSaved.getCertificates())
+                .workExperienceId(lastSaved.getWorkExperience())
+                .projectsId(lastSaved.getProjects())
+                .educationId(lastSaved.getEducation())
+                .socialMediaId(lastSaved.getSocialMedia())
+                .addressId(lastSaved.getAddressId())
                 .build();
     }
 
@@ -169,11 +201,12 @@ public class FreelancerServiceImpl implements FreelancerService {
                 .phoneNumber(freelancer.getPhoneNumber())
                 .skills(freelancer.getSkills())
                 .UserId(freelancer.getUserId())
-                .certificatesId(freelancer.getCertificates().stream().map(Certificate::getId).toList())
-                .workExperienceId(freelancer.getWorkExperience().stream().map(WorkExperience::getId).toList())
-                .projectsId(freelancer.getProjects().stream().map(Project::getId).toList())
-                .educationId(freelancer.getEducation().stream().map(Education::getId).toList())
-                .socialMediaId(freelancer.getSocialMedia().stream().map(SocialMedia::getId).toList())
+                .certificatesId(freelancer.getCertificates())
+                .workExperienceId(freelancer.getWorkExperience())
+                .projectsId(freelancer.getProjects())
+                .educationId(freelancer.getEducation())
+                .socialMediaId(freelancer.getSocialMedia())
+                .addressId(freelancer.getAddressId())
                 .build();
     }
 
@@ -218,12 +251,6 @@ public class FreelancerServiceImpl implements FreelancerService {
                 .email(saved.getEmail())
                 .phoneNumber(saved.getPhoneNumber())
                 .skills(saved.getSkills())
-                .UserId(saved.getUserId())
-                .certificatesId(saved.getCertificates().stream().map(Certificate::getId).toList())
-                .workExperienceId(saved.getWorkExperience().stream().map(WorkExperience::getId).toList())
-                .projectsId(saved.getProjects().stream().map(Project::getId).toList())
-                .educationId(saved.getEducation().stream().map(Education::getId).toList())
-                .socialMediaId(saved.getSocialMedia().stream().map(SocialMedia::getId).toList())
                 .build();
     }
 
@@ -243,11 +270,12 @@ public class FreelancerServiceImpl implements FreelancerService {
                         .phoneNumber(freelancer.getPhoneNumber())
                         .skills(freelancer.getSkills())
                         .UserId(freelancer.getUserId())
-                        .certificatesId(freelancer.getCertificates().stream().map(Certificate::getId).toList())
-                        .workExperienceId(freelancer.getWorkExperience().stream().map(WorkExperience::getId).toList())
-                        .projectsId(freelancer.getProjects().stream().map(Project::getId).toList())
-                        .educationId(freelancer.getEducation().stream().map(Education::getId).toList())
-                        .socialMediaId(freelancer.getSocialMedia().stream().map(SocialMedia::getId).toList())
+                        .certificatesId(freelancer.getCertificates())
+                        .workExperienceId(freelancer.getWorkExperience())
+                        .projectsId(freelancer.getProjects())
+                        .educationId(freelancer.getEducation())
+                        .socialMediaId(freelancer.getSocialMedia())
+                        .addressId(freelancer.getAddressId())
                         .build())
                 .toList();
     }
@@ -304,7 +332,7 @@ public class FreelancerServiceImpl implements FreelancerService {
         // get address from address service by id
         AddressDto address = null;
         try {
-            address = restTemplate.getForObject(addressServiceUrl + "/address/rest-template/get-address/" + freelancer.getAddressId(), AddressDto.class);
+            address = restTemplate.getForObject(addressServiceUrl + "/rest-template/get-address/" + freelancer.getAddressId(), AddressDto.class);
         } catch (Exception e) {
             throw new CustomException(
                     "Address not found",
@@ -329,6 +357,8 @@ public class FreelancerServiceImpl implements FreelancerService {
                 .projects(projects)
                 .reviews(reviews)
                 .socialMedia(socialMedia)
+                .user(user)
+                .address(address)
                 .build();
     }
 

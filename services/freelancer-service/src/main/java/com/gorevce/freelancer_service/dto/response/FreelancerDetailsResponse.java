@@ -28,6 +28,4 @@ public class FreelancerDetailsResponse {
 
     private AddressDto address;
     private UserDto user;
-//    private String addressId;
-//    private String UserId;
 }
