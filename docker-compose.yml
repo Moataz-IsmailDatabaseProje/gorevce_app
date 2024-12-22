@@ -44,6 +44,25 @@ services:
     ports:
       - 1080:1080
       - 1025:1025
+
+  config-server:
+    build:
+      context: ./services/config-server
+    container_name: config-server
+    ports:
+      - "0.0.0.0:8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+    networks:
+      - MONGO
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    volumes:
+      - ./services/config-server/src/main/resources/configurations:/configurations
+
+
+
 networks:
   MONGO:
     name: MONGO
