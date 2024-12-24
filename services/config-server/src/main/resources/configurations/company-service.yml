@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/company_db?authSource=admin
+
+  mail:
+    host: localhost
+    port: 1025
+    username: ismailkattan.contact@gmail.com
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+    default-encoding: UTF-8
+
+gorevce:
+  app:
+    jwtSecret: SaK_SaU_BBF_CS_GoReVcE_SecretKey_2024_2025_bilgisayar_muhendisligi_tasarimi_54_halep_iskenderiye
+    jwtExpirationMs: 86400000
+
+server:
+  port: 8094

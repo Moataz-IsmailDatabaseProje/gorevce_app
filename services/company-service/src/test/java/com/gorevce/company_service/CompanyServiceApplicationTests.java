@@ -1,10 +1,10 @@
-package com.gorevce.employer_service;
+package com.gorevce.company_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EmployerServiceApplicationTests {
+class CompanyServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
