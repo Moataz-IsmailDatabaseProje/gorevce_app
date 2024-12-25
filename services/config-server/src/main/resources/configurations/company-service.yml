@@ -21,5 +21,12 @@ gorevce:
     jwtSecret: SaK_SaU_BBF_CS_GoReVcE_SecretKey_2024_2025_bilgisayar_muhendisligi_tasarimi_54_halep_iskenderiye
     jwtExpirationMs: 86400000
 
+application:
+  config:
+    authentication-service:
+      url: http://localhost:8091/authentication
+    address-service:
+      url: http://localhost:8092/address
+
 server:
   port: 8094

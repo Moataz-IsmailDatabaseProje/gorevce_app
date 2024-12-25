@@ -1,24 +1,21 @@
-package com.gorevce.company_service.model;
+package com.gorevce.company_service.dto;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "company")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Company {
+public class CompanyResponse {
     private String id;
     private String name;
-    private String taxNumber;
     private String description;
+    private String taxNumber;
     private String email;
     private String phone;
     private String website;
     private String logo;
-    private Boolean isDeleted;
     private String userId;
     private String addressId;
 }

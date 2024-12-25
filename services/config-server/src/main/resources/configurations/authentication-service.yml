@@ -21,6 +21,11 @@ gorevce:
 server:
   port: 8091
 
+application:
+  email:
+    verification:
+      url: http://localhost:8091/authentication/auth/verify-email?token=
+
 
 logging:
   file:
