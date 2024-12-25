@@ -14,13 +14,14 @@
         <module name="discovery" />
         <module name="gateway" />
       </profile>
-      <profile name="Annotation profile for company-service" enabled="true">
+      <profile name="Annotation profile for task-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
+        <module name="task-service" />
         <module name="company-service" />
       </profile>
     </annotationProcessing>
@@ -39,6 +40,7 @@
       <module name="employer-service" options="-parameters" />
       <module name="freelancer-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="task-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
