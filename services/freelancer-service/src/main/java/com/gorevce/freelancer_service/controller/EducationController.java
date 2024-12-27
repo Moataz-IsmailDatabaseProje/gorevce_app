@@ -4,6 +4,7 @@ import com.gorevce.freelancer_service.dto.request.EducationRequest;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.service.EducationService;
 import com.gorevce.freelancer_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class EducationController {
 
     // create education
     @PostMapping("/create-education")
+    @Operation(summary = "Create education", description = "Create education")
     public ResponseEntity<?> createEducation(@RequestBody EducationRequest educationRequest) {
         try {
             return ResponseEntity.ok().body(
@@ -42,6 +44,7 @@ public class EducationController {
 
     // get education by id
     @GetMapping("/get-education")
+    @Operation(summary = "Get education by id", description = "Get education by id")
     public ResponseEntity<?> getEducationById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -67,6 +70,7 @@ public class EducationController {
 
     // get all educations by freelancer id
     @GetMapping("/get-educations")
+    @Operation(summary = "Get educations by freelancer id", description = "Get educations by freelancer id")
     public ResponseEntity<?> getEducationsByFreelancerId(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(
@@ -92,6 +96,7 @@ public class EducationController {
 
     // update education
     @PutMapping("/update-education")
+    @Operation(summary = "Update education", description = "Update education")
     public ResponseEntity<?> updateEducation(@RequestParam String id, @RequestBody EducationRequest educationRequest) {
         try {
             return ResponseEntity.ok().body(
@@ -117,6 +122,7 @@ public class EducationController {
 
     // delete education
     @DeleteMapping("/delete-education")
+    @Operation(summary = "Delete education", description = "Delete education")
     public ResponseEntity<?> deleteEducation(@RequestParam String id) {
         try {
             educationService.deleteEducation(id);
@@ -142,6 +148,7 @@ public class EducationController {
 
     // get all educations
     @GetMapping("/get-all-educations")
+    @Operation(summary = "Get all educations", description = "Get all educations")
     public ResponseEntity<?> getAllEducations() {
         try {
             return ResponseEntity.ok().body(
@@ -167,6 +174,7 @@ public class EducationController {
 
     // get education details
     @GetMapping("/get-education-details")
+    @Operation(summary = "Get education details", description = "Get education details")
     public ResponseEntity<?> getEducationDetails(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(

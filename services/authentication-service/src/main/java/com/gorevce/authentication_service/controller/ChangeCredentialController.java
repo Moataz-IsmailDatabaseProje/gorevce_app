@@ -5,6 +5,7 @@ import com.gorevce.authentication_service.dto.request.ChangeUsernameRequest;
 import com.gorevce.authentication_service.exception.CustomException;
 import com.gorevce.authentication_service.service.AuthService;
 import com.gorevce.authentication_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class ChangeCredentialController {
 
     // changeEmail
     @PostMapping("/change-email")
+    @Operation(summary = "Change email", description = "Change email")
     ResponseEntity<?> changeEmail(@RequestBody ChangeEmailRequest changeEmailRequest, HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization");
@@ -45,6 +47,7 @@ public class ChangeCredentialController {
     }
     // changeUsername
     @PostMapping("/change-username")
+    @Operation(summary = "Change username", description = "Change username")
     ResponseEntity<?> changeUsername(@RequestBody ChangeUsernameRequest changeUsernameRequest, HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization");

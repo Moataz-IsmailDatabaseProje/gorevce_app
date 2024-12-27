@@ -4,6 +4,7 @@ import com.gorevce.company_service.dto.CompanyRequest;
 import com.gorevce.company_service.exception.CustomException;
 import com.gorevce.company_service.service.CompanyService;
 import com.gorevce.company_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class CompanyController {
 
     // create company
     @PostMapping("/create-company")
+    @Operation(summary = "Create company", description = "Create company")
     public ResponseEntity<?> createCompany(@RequestBody CompanyRequest companyRequest) {
         try {
             return ResponseEntity.ok(
@@ -41,6 +43,7 @@ public class CompanyController {
 
     // get company
     @GetMapping("/get-company")
+    @Operation(summary = "Get company", description = "Get company")
     public ResponseEntity<?> getCompany(@RequestParam String id) {
         try {
             return ResponseEntity.ok(
@@ -65,6 +68,7 @@ public class CompanyController {
 
     // update company
     @PutMapping("/update-company")
+    @Operation(summary = "Update company", description = "Update company")
     public ResponseEntity<?> updateCompany(@RequestBody CompanyRequest companyRequest, @RequestParam String id) {
         try {
             return ResponseEntity.ok(
@@ -89,6 +93,7 @@ public class CompanyController {
 
     // delete company
     @DeleteMapping("/delete-company")
+    @Operation(summary = "Delete company", description = "Delete company")
     public ResponseEntity<?> deleteCompany(@RequestParam String id) {
         try {
             companyService.deleteCompany(id);
@@ -114,6 +119,7 @@ public class CompanyController {
 
     // restore company
     @PutMapping("/restore-company")
+    @Operation(summary = "Restore company", description = "Restore company")
     public ResponseEntity<?> restoreCompany(@RequestParam String id) {
         try {
             companyService.restoreCompany(id);
@@ -139,6 +145,7 @@ public class CompanyController {
 
     // get all companies
     @GetMapping("/get-companies")
+    @Operation(summary = "Get all companies", description = "Get all companies")
     public ResponseEntity<?> getCompanies() {
         try {
             return ResponseEntity.ok(
@@ -163,6 +170,7 @@ public class CompanyController {
 
     // get all companies by user id
     @GetMapping("/get-companies-by-user-id")
+    @Operation(summary = "Get all companies by user id", description = "Get all companies by user id")
     public ResponseEntity<?> getCompaniesByUserId(@RequestParam String userId) {
         try {
             return ResponseEntity.ok(
@@ -187,6 +195,7 @@ public class CompanyController {
 
     // get companies by address id
     @GetMapping("/get-companies-by-address-id")
+    @Operation(summary = "Get companies by address id", description = "Get companies by address id")
     public ResponseEntity<?> getCompaniesByAddressId(@RequestParam String addressId) {
         try {
             return ResponseEntity.ok(

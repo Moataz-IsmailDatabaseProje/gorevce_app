@@ -6,6 +6,7 @@ import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.service.FreelancerService;
 import com.gorevce.freelancer_service.service.ProjectService;
 import com.gorevce.freelancer_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class FreelancerController {
 
     // create freelancer
     @PostMapping("/create-freelancer")
+    @Operation(summary = "Create freelancer", description = "Create freelancer")
     public ResponseEntity<?> createFreelancer(@RequestBody FreelancerRequest freelancerRequest) {
         try {
             return ResponseEntity.ok().body(
@@ -42,6 +44,7 @@ public class FreelancerController {
     }
     // get freelancer
     @GetMapping("/get-freelancer")
+    @Operation(summary = "Get freelancer", description = "Get freelancer")
     public ResponseEntity<?> getFreelancerById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -65,6 +68,7 @@ public class FreelancerController {
     }
     // update freelancer
     @PutMapping("/update-freelancer")
+    @Operation(summary = "Update freelancer", description = "Update freelancer")
     public ResponseEntity<?> updateFreelancer(@RequestParam String id, @RequestBody FreelancerRequest freelancerRequest) {
         try {
             return ResponseEntity.ok().body(
@@ -88,6 +92,7 @@ public class FreelancerController {
     }
     // delete freelancer
     @DeleteMapping("/delete-freelancer")
+    @Operation(summary = "Delete freelancer", description = "Delete freelancer")
     public ResponseEntity<?> deleteFreelancerById(@RequestParam String id) {
         try {
             freelancerService.deleteFreelancerById(id);
@@ -112,6 +117,7 @@ public class FreelancerController {
     }
     // restore freelancer
     @PutMapping("/restore-freelancer")
+    @Operation(summary = "Restore freelancer", description = "Restore freelancer")
     public ResponseEntity<?> restoreFreelancerById(@RequestParam String id) {
         try {
             freelancerService.restoreFreelancerById(id);
@@ -136,6 +142,7 @@ public class FreelancerController {
     }
     // get all freelancers
     @GetMapping("/get-all-freelancers")
+    @Operation(summary = "Get all freelancers", description = "Get all freelancers")
     public ResponseEntity<?> getAllFreelancers() {
         try {
             return ResponseEntity.ok().body(
@@ -159,6 +166,7 @@ public class FreelancerController {
     }
     // get freelancer details
     @GetMapping("/get-freelancer-details")
+    @Operation(summary = "Get freelancer details", description = "Get freelancer details")
     public ResponseEntity<?> getFreelancerDetailsById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -183,6 +191,7 @@ public class FreelancerController {
 
     // get user by id
     @GetMapping("/get-credentials")
+    @Operation(summary = "Get user by id", description = "Get user by id")
     public ResponseEntity<?> getUserById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -206,6 +215,7 @@ public class FreelancerController {
     }
     // get freelancer address by id
     @GetMapping("/get-address")
+    @Operation(summary = "Get address by id", description = "Get address by id")
     public ResponseEntity<?> getAddressById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -230,6 +240,7 @@ public class FreelancerController {
 
     // get freelancer work experience by id
     @GetMapping("/get-work-experience")
+    @Operation(summary = "Get work experience by id", description = "Get work experience by id")
     public ResponseEntity<?> getWorkExperienceById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -253,6 +264,7 @@ public class FreelancerController {
     }
     // get freelancer education by id
     @GetMapping("/get-education")
+    @Operation(summary = "Get education by id", description = "Get education by id")
     public ResponseEntity<?> getEducationById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -276,6 +288,7 @@ public class FreelancerController {
     }
     // get freelancer skills by id
     @GetMapping("/get-skills")
+    @Operation(summary = "Get skills by id", description = "Get skills by id")
     public ResponseEntity<?> getSkillsById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -299,6 +312,7 @@ public class FreelancerController {
     }
     // get freelancer certificates by id
     @GetMapping("/get-certificates")
+    @Operation(summary = "Get certificates by id", description = "Get certificates by id")
     public ResponseEntity<?> getCertificateById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -322,6 +336,7 @@ public class FreelancerController {
     }
     // get freelancer projects by id
     @GetMapping("/get-projects")
+    @Operation(summary = "Get projects by id", description = "Get projects by id")
     public ResponseEntity<?> getProjectById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -345,6 +360,7 @@ public class FreelancerController {
     }
     // get freelancer reviews by id
     @GetMapping("/get-reviews")
+    @Operation(summary = "Get reviews by id", description = "Get reviews by id")
     public ResponseEntity<?> getReviewById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -368,6 +384,7 @@ public class FreelancerController {
     }
     // get freelancer social media by id
     @GetMapping("/get-social-media")
+    @Operation(summary = "Get social media by id", description = "Get social media by id")
     public ResponseEntity<?> getSocialMediaById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(

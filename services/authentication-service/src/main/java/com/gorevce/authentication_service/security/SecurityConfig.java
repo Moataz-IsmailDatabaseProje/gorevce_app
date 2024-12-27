@@ -58,6 +58,12 @@ public class SecurityConfig {
 
 
                         auth -> {
+                            auth.requestMatchers(
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/webjars/**"
+                            ).permitAll();
                             auth.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
                             auth.requestMatchers("/authentication/**").permitAll();
                             auth.requestMatchers("/authentication/permissions/rest-template/**").permitAll();
