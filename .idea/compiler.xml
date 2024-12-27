@@ -12,10 +12,21 @@
         <module name="authentication-service" />
         <module name="address-service" />
         <module name="discovery" />
+        <module name="task-service" />
         <module name="gateway" />
+      </profile>
+      <profile name="Annotation profile for company-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="company-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="employer-service" target="17" />
       <module name="user-service" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -23,10 +34,13 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="address-service" options="-parameters" />
       <module name="authentication-service" options="-parameters" />
+      <module name="company-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
+      <module name="employer-service" options="-parameters" />
       <module name="freelancer-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="task-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

@@ -5,6 +5,7 @@ import com.gorevce.freelancer_service.dto.request.SocialMediaRequest;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.service.SocialMediaService;
 import com.gorevce.freelancer_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class SocialMediaController {
 
     // create social media
     @PostMapping("/create-social-media")
+    @Operation(summary = "Create social media", description = "Create social media")
     public ResponseEntity<?> createSocialMedia(@RequestBody SocialMediaRequest socialMedia) {
         try {
             return ResponseEntity.ok().body(
@@ -40,6 +42,7 @@ public class SocialMediaController {
 
     // get social media by id
     @GetMapping("/get-social-media")
+    @Operation(summary = "Get social media by id", description = "Get social media by id")
     public ResponseEntity<?> getSocialMediaById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -61,6 +64,7 @@ public class SocialMediaController {
 
     // get social media by freelancer id
     @GetMapping("/get-social-media-by-freelancer")
+    @Operation(summary = "Get social media by freelancer id", description = "Get social media by freelancer id")
     public ResponseEntity<?> getSocialMediaByFreelancerId(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(
@@ -82,6 +86,7 @@ public class SocialMediaController {
 
     // update social media
     @PutMapping("/update-social-media")
+    @Operation(summary = "Update social media", description = "Update social media")
     public ResponseEntity<?> updateSocialMedia(@RequestParam String id, @RequestBody SocialMediaRequest socialMedia) {
         try {
             return ResponseEntity.ok().body(
@@ -103,6 +108,7 @@ public class SocialMediaController {
 
     // delete social media
     @DeleteMapping("/delete-social-media")
+    @Operation(summary = "Delete social media", description = "Delete social media")
     public ResponseEntity<?> deleteSocialMedia(@RequestParam String id) {
         try {
             socialMediaService.deleteSocialMedia(id);
@@ -125,6 +131,7 @@ public class SocialMediaController {
 
     // get all social media
     @GetMapping("/get-all-social-media")
+    @Operation(summary = "Get all social media", description = "Get all social media")
     public ResponseEntity<?> getAllSocialMedia() {
         try {
             return ResponseEntity.ok().body(
