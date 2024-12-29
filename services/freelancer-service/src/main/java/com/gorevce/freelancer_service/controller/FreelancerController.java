@@ -406,4 +406,9 @@ public class FreelancerController {
                     );
         }
     }
+    @GetMapping("/rest-template/exists/{id}")
+    @Operation(summary = "Check if freelancer exists for rest tamplate", description = "Check if freelancer exists for rest template")
+    public ResponseEntity<Boolean> exists(@PathVariable String id) {
+        return ResponseEntity.ok(freelancerService.doesFreelancerExist(id));
+    }
 }

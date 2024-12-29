@@ -46,6 +46,16 @@ public class TaskServiceImpl implements TaskService {
                     )
             );
         }
+        // if address not null check if address exists
+        if (taskRequest.getAddressId() != null && !validationService.doesAddressExist(taskRequest.getAddressId())) {
+            throw new CustomException(
+                    "Address does not exist",
+                    400,
+                    Map.of(
+                            "addressId", taskRequest.getAddressId()
+                    )
+            );
+        }
         // create task
         Task task = Task.builder()
                 .name(taskRequest.getName())
@@ -57,6 +67,8 @@ public class TaskServiceImpl implements TaskService {
                 .companyId(taskRequest.getCompanyId())
                 .applicationIds(List.of())
                 .freelancerId(null)
+                .addressId(taskRequest.getAddressId())
+                .imageUrls(taskRequest.getImageUrls())
                 .status(TaskStatus.CREATED)
                 .build();
         Task savedTask = taskRepository.save(task);
@@ -75,6 +87,8 @@ public class TaskServiceImpl implements TaskService {
                 .difficulty(savedTask.getDifficulty().name())
                 .companyId(savedTask.getCompanyId())
                 .freelancerId(savedTask.getFreelancerId())
+                .addressId(savedTask.getAddressId())
+                .imageUrls(savedTask.getImageUrls())
                 .applicationCount(savedTask.getApplicationIds().size())
                 .build();
     }
@@ -108,6 +122,7 @@ public class TaskServiceImpl implements TaskService {
         task.setDuration(taskRequest.getDuration());
         task.setWageCeiling(taskRequest.getWageCeiling());
         task.setWageFloor(taskRequest.getWageFloor());
+        task.setImageUrls(taskRequest.getImageUrls());
         task.setDifficulty(DifficultyLevel.getDifficultyLevel(taskRequest.getDifficulty()));
         Task updatedTask = taskRepository.save(task);
 
@@ -164,19 +179,8 @@ public class TaskServiceImpl implements TaskService {
         // get all tasks
         List<Task> tasks = taskRepository.findAll();
         return tasks.stream()
-                .map(task -> TaskResponse.builder()
-                        .id(task.getId())
-                        .name(task.getName())
-                        .description(task.getDescription())
-                        .status(task.getStatus().name())
-                        .duration(task.getDuration())
-                        .wageCeiling(task.getWageCeiling())
-                        .wageFloor(task.getWageFloor())
-                        .difficulty(task.getDifficulty().name())
-                        .companyId(task.getCompanyId())
-                        .freelancerId(task.getFreelancerId())
-                        .applicationCount(task.getApplicationIds().size())
-                        .build()
+                .map(
+                        this::mapTaskToTaskResponse
                 )
                 .toList();
 

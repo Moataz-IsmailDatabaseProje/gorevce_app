@@ -2,6 +2,8 @@ package com.gorevce.task_service.dto.request;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,4 +17,6 @@ public class TaskRequest {
     private Integer wageFloor;
     private String difficulty;
     private String companyId;
+    private String addressId;
+    private List<String> imageUrls;
 }

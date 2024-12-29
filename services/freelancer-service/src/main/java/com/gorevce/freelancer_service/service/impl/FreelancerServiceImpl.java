@@ -637,4 +637,9 @@ public class FreelancerServiceImpl implements FreelancerService {
         freelancer.setIsDeleted(false);
         freelancerRepository.save(freelancer);
     }
+
+    @Override
+    public Boolean doesFreelancerExist(String id) {
+        return freelancerRepository.existsById(id);
+    }
 }

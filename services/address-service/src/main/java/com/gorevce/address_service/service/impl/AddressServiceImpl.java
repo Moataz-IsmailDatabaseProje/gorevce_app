@@ -132,4 +132,10 @@ public class AddressServiceImpl implements AddressService {
                 .build()
         ).toList();
     }
+
+    @Override
+    public Boolean doesAddressExist(String addressId) {
+        // check if address exists
+        return addressRepository.existsById(addressId);
+    }
 }

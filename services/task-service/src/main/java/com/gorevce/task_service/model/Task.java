@@ -27,6 +27,8 @@ public class Task {
     private String companyId;
     private List<String> applicationIds;
     private String freelancerId;
+    private String addressId;
+    private List<String> imageUrls;
     // todo: add address
     // todo: add imageUrls
 }

@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> {
+                            auth.requestMatchers("company/rest-template/**").permitAll();
                             auth.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
                             auth.anyRequest().authenticated();
                         }
