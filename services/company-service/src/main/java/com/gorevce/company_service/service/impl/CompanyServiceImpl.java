@@ -280,4 +280,9 @@ public class CompanyServiceImpl implements CompanyService {
                 .addressId(company.getAddressId())
                 .build()).toList();
     }
+
+    @Override
+    public Boolean doesCompanyExist(String companyId) {
+        return companyRepository.existsById(companyId);
+    }
 }

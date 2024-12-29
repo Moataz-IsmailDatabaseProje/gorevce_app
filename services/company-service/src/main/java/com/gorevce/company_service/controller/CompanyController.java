@@ -217,4 +217,10 @@ public class CompanyController {
                     );
         }
     }
+
+    @GetMapping("/rest-template/exists/{companyId}")
+    @Operation(summary = "Check if company exists for rest template", description = "Check if company exists for restt tamplate")
+    public ResponseEntity<Boolean> doesCompanyExist(@PathVariable String companyId) {
+        return ResponseEntity.ok(companyService.doesCompanyExist(companyId));
+    }
 }

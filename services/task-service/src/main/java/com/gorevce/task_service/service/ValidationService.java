@@ -23,6 +23,9 @@ public class ValidationService {
     @Value("${application.config.company-service.url}")
     private String COMPANY_SERVICE_URL;
 
+    @Value("${application.config.address-service.url}")
+    private String ADDRESS_SERVICE_URL;
+
     @Autowired
     @Qualifier("plainRestTemplate")
     private RestTemplate restTemplate;
@@ -47,6 +50,15 @@ public class ValidationService {
     public boolean doesCompanyExist(String companyId) {
         try {
             ResponseEntity<Boolean> response = restTemplate.getForEntity(COMPANY_SERVICE_URL + "/rest-template/exists/" + companyId, Boolean.class);
+            return response.getBody() != null && response.getBody();
+        } catch (HttpClientErrorException e) {
+            return false;
+        }
+    }
+
+    public boolean doesAddressExist(String addressId) {
+        try {
+            ResponseEntity<Boolean> response = restTemplate.getForEntity(ADDRESS_SERVICE_URL + "/rest-template/exists/" + addressId, Boolean.class);
             return response.getBody() != null && response.getBody();
         } catch (HttpClientErrorException e) {
             return false;

@@ -2,6 +2,8 @@ package com.gorevce.task_service.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,4 +22,6 @@ public class TaskResponse {
     private String freelancerId;
     private Integer applicationCount;
     private Integer commentCount;
+    private String addressId;
+    private List<String> imageUrls;
 }

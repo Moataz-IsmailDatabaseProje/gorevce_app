@@ -24,4 +24,6 @@ public interface CompanyService {
     List<CompanyResponse> getCompaniesByUserId(String userId);
     // Get companies by address id
     List<CompanyResponse> getCompaniesByAddressId(String addressId);
+
+    Boolean doesCompanyExist(String companyId);
 }

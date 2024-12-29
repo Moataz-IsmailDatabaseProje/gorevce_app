@@ -205,6 +205,11 @@ public class AddressController {
                             )
                     );
         }
+    }
 
+    @GetMapping("/rest-template/exists/{addressId}")
+    @Operation(summary = "Check if address exists by addressId for rest template", description = "Check if address exists by addressId for rest template")
+    ResponseEntity<Boolean> doesAddressExist(@PathVariable String addressId) {
+        return ResponseEntity.ok(addressService.doesAddressExist(addressId));
     }
 }
