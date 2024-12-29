@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -635,5 +636,10 @@ public class FreelancerServiceImpl implements FreelancerService {
         // restore freelancer
         freelancer.setIsDeleted(false);
         freelancerRepository.save(freelancer);
+    }
+
+    @Override
+    public Boolean doesFreelancerExist(String id) {
+        return freelancerRepository.existsById(id);
     }
 }

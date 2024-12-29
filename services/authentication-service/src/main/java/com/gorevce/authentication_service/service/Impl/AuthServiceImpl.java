@@ -14,6 +14,7 @@ import com.gorevce.authentication_service.service.EmailService;
 import com.gorevce.authentication_service.service.RoleService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +43,8 @@ public class AuthServiceImpl implements AuthService {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
+    @Value("${application.email.verification.url}")
+    private String verificationUrl;
 
 
     @Override
@@ -92,9 +95,8 @@ public class AuthServiceImpl implements AuthService {
         // Save the user with the verification token
         User savedUser = userRepository.save(user);
         // send verification email
-        String verificationUrl = "http://localhost:8090/authentication/auth/verify-email?token=" + user.getVerificationToken();
         try {
-            emailService.sendVerificationEmail(user.getEmail(), verificationUrl);
+            emailService.sendVerificationEmail(user.getEmail(), verificationUrl + user.getVerificationToken());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

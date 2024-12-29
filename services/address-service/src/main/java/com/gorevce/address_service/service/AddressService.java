@@ -24,4 +24,6 @@ public interface AddressService {
 
     // get all addresses by addressOfId
     List<AddressResponse> getAllAddressesByAddressOfId(String addressOfId);
+
+    Boolean doesAddressExist(String addressId);
 }

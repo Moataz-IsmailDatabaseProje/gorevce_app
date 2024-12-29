@@ -12,10 +12,13 @@
         <module name="authentication-service" />
         <module name="address-service" />
         <module name="discovery" />
+        <module name="task-service" />
+        <module name="company-service" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="employer-service" target="17" />
       <module name="user-service" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -23,10 +26,13 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="address-service" options="-parameters" />
       <module name="authentication-service" options="-parameters" />
+      <module name="company-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
+      <module name="employer-service" options="-parameters" />
       <module name="freelancer-service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="task-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

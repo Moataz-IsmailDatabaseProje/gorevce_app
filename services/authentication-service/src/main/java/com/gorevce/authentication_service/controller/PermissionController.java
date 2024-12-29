@@ -4,9 +4,9 @@ package com.gorevce.authentication_service.controller;
 import com.gorevce.authentication_service.dto.request.PermissionRequest;
 import com.gorevce.authentication_service.dto.response.PermissionResponse;
 import com.gorevce.authentication_service.exception.CustomException;
-import com.gorevce.authentication_service.model.EndpointPermission;
 import com.gorevce.authentication_service.service.EndpointPermissionService;
 import com.gorevce.authentication_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +20,7 @@ public class PermissionController {
     private EndpointPermissionService endpointPermissionService;
 
     @GetMapping("/get-permissions")
+    @Operation(summary = "Get permissions", description = "Get permissions")
     public ResponseEntity<?> getPermissions() {
         try {
             return ResponseEntity.ok(
@@ -44,6 +45,7 @@ public class PermissionController {
 
     // addPermission
     @PostMapping("/create-permission")
+    @Operation(summary = "Add permission", description = "Add permission")
     public ResponseEntity<?> addPermission(@RequestBody PermissionRequest createPermissionRequest) {
         try {
             return ResponseEntity.ok(
@@ -68,6 +70,7 @@ public class PermissionController {
 
     // deletePermission
     @DeleteMapping("/delete-permission")
+    @Operation(summary = "Delete permission", description = "Delete permission")
     public ResponseEntity<?> deletePermission(@RequestParam String permissionId) {
         try {
             return ResponseEntity.ok(
@@ -92,6 +95,7 @@ public class PermissionController {
 
     // updatePermission
     @PutMapping("/update-permission")
+    @Operation(summary = "Update permission", description = "Update permission")
     public ResponseEntity<?> updatePermission(@RequestParam String permissionId, @RequestBody PermissionRequest updatePermissionRequest) {
         try {
             return ResponseEntity.ok(
@@ -116,6 +120,7 @@ public class PermissionController {
 
     // getPermissionById
     @GetMapping("/get-permission")
+    @Operation(summary = "Get permission by id", description = "Get permission by id")
     public ResponseEntity<?> getPermissionById(@RequestParam String permissionId) {
         try {
             return ResponseEntity.ok(
@@ -139,6 +144,7 @@ public class PermissionController {
     }
     // getPermissionByEndpoint
     @GetMapping("/rest-template/get-permission")
+    @Operation(summary = "Get permission by endpoint for rest template", description = "Get permission by endpoint for rest template")
     public PermissionResponse getPermissionByEndpoint(@RequestParam String endpoint, @RequestParam String httpMethod) {
         return endpointPermissionService.permissionByEndpointAndHttpMethod(endpoint, httpMethod);
     }

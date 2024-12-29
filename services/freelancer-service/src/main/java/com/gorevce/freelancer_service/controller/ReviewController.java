@@ -5,6 +5,7 @@ import com.gorevce.freelancer_service.dto.request.ReviewRequest;
 import com.gorevce.freelancer_service.exception.CustomException;
 import com.gorevce.freelancer_service.service.ReviewService;
 import com.gorevce.freelancer_service.util.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class ReviewController {
 
     // create review
     @PostMapping("/create-review")
+    @Operation(summary = "Create review", description = "Create review")
     public ResponseEntity<?> createReview(@RequestBody ReviewRequest reviewRequest) {
         try {
             return ResponseEntity.ok().body(
@@ -42,6 +44,7 @@ public class ReviewController {
 
     // get review by id
     @GetMapping("/get-review")
+    @Operation(summary = "Get review by id", description = "Get review by id")
     public ResponseEntity<?> getReviewById(@RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -66,6 +69,7 @@ public class ReviewController {
 
     // update review
     @PutMapping("/update-review")
+    @Operation(summary = "Update review", description = "Update review")
     public ResponseEntity<?> updateReview(@RequestBody ReviewRequest reviewRequest, @RequestParam String id) {
         try {
             return ResponseEntity.ok().body(
@@ -90,6 +94,7 @@ public class ReviewController {
 
     // delete review
     @DeleteMapping("/delete-review")
+    @Operation(summary = "Delete review", description = "Delete review")
     public ResponseEntity<?> deleteReview(@RequestParam String id) {
         try {
             reviewService.deleteReview(id);
@@ -114,6 +119,7 @@ public class ReviewController {
 
     // get all reviews
     @GetMapping("/get-all-reviews")
+    @Operation(summary = "Get all reviews", description = "Get all reviews")
     public ResponseEntity<?> getReviews() {
         try {
             return ResponseEntity.ok().body(
@@ -138,6 +144,7 @@ public class ReviewController {
 
     // get reviews by freelancer
     @GetMapping("/get-reviews")
+    @Operation(summary = "Get reviews by freelancer", description = "Get reviews by freelancer")
     public ResponseEntity<?> getReviewsByFreelancer(@RequestParam String freelancerId) {
         try {
             return ResponseEntity.ok().body(
