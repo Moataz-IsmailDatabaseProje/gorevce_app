@@ -1,17 +1,14 @@
 package com.gorevce.authentication_service.controller;
 
 import com.gorevce.authentication_service.dto.request.*;
-import com.gorevce.authentication_service.dto.response.UserInfoResponse;
 import com.gorevce.authentication_service.exception.CustomException;
 import com.gorevce.authentication_service.service.AuthService;
 import com.gorevce.authentication_service.util.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.ws.rs.OPTIONS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.processing.SupportedOptions;
 
 @RestController
 @CrossOrigin

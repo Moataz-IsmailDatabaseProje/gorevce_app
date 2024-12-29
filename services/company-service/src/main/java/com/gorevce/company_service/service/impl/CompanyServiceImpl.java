@@ -28,10 +28,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Qualifier("plainRestTemplate")
     private RestTemplate restTemplate;
 
-    @Value("${application.config.authenticator-service.url}")
+    @Value("${application.config.authentication-service.url}")
     private String authenticatorServiceUrl;
 
-    @Value("${application.config.address-service.path}")
+    @Value("${application.config.address-service.url}")
     private String addressServicePath;
 
     @Override

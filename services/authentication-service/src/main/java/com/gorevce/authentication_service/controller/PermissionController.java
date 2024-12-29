@@ -4,7 +4,6 @@ package com.gorevce.authentication_service.controller;
 import com.gorevce.authentication_service.dto.request.PermissionRequest;
 import com.gorevce.authentication_service.dto.response.PermissionResponse;
 import com.gorevce.authentication_service.exception.CustomException;
-import com.gorevce.authentication_service.model.EndpointPermission;
 import com.gorevce.authentication_service.service.EndpointPermissionService;
 import com.gorevce.authentication_service.util.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
