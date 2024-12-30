@@ -1,5 +1,6 @@
 package com.gorevce.task_service.controller;
 
+import com.gorevce.task_service.dto.EmailDto;
 import com.gorevce.task_service.dto.request.ApplicationRequest;
 import com.gorevce.task_service.exception.CustomException;
 import com.gorevce.task_service.service.ApplicationService;
@@ -17,7 +18,7 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     // create application
-    @Operation(summary = "Create application",description = "Create application")
+    @Operation(summary = "Create application (1)",description = "Create application (1)")
     @PostMapping("/create-application")
     public ResponseEntity<?> createApplication(@RequestBody ApplicationRequest applicationRequest) {
         try {
@@ -177,5 +178,49 @@ public class ApplicationController {
         }
     }
 
+    // accept application by company for task
+    @Operation(summary = "Accept application by company for task (2)",description = "Accept application by company for task (2)")
+    @PutMapping("/accept-application")
+    public ResponseEntity<?> acceptApplication(@RequestParam String applicationId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Application accepted successfully")
+                            .httpStatusCode(200)
+                            .response(applicationService.acceptApplication(applicationId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+    // apply payment for application
+    @Operation(summary = "Apply payment for application (7)",description = "Apply payment for application (7)")
+    @PutMapping("/apply-payment")
+    public ResponseEntity<?> applyPayment(@RequestParam String applicationId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Payment applied successfully")
+                            .httpStatusCode(200)
+                            .response(applicationService.applyPayment(applicationId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
 
 }

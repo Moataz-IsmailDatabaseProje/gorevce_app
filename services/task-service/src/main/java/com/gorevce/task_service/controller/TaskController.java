@@ -262,4 +262,142 @@ public class TaskController {
         }
     }
 
+    // accept task by freelancer
+    @Operation(summary = "Accept task by freelancer (3)",description = "Accept task by freelancer (3)")
+    @PutMapping("/accept-task")
+    public ResponseEntity<?> acceptTask(@RequestParam String taskId, @RequestParam String applicationId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Task accepted successfully")
+                            .httpStatusCode(200)
+                            .response(taskService.acceptTask(taskId, applicationId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
+    // reject task by freelancer
+    @Operation(summary = "Reject task by freelancer (3)",description = "Reject task by freelancer (3)")
+    @PutMapping("/reject-task")
+    public ResponseEntity<?> rejectTask(@RequestParam String taskId, @RequestParam String applicationId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Task rejected successfully")
+                            .httpStatusCode(200)
+                            .response(taskService.rejectTask(taskId, applicationId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
+    // task completed by freelancer
+    @Operation(summary = "Task completed by freelancer (4)",description = "Task completed by freelancer (4)")
+    @PutMapping("/complete-task")
+    public ResponseEntity<?> completeTask(@RequestParam String taskId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Setting task as completed successfully, please wait for company to review")
+                            .httpStatusCode(200)
+                            .response(taskService.completeTask(taskId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
+    // task reviewed by company
+    @Operation(summary = "Task reviewed by company (5)",description = "Task reviewed by company (5)")
+    @PutMapping("/review-task")
+    public ResponseEntity<?> reviewTask(@RequestParam String taskId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Task reviewed successfully, please wait for payment  to be processed")
+                            .httpStatusCode(200)
+                            .response(taskService.reviewTask(taskId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
+    // after review task, the task is not completed
+    @Operation(summary = "after review Task not completed (5)",description = "after review Task not completed (5)")
+    @PutMapping("/not-completed-task")
+    public ResponseEntity<?> notCompletedTask(@RequestParam String taskId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Task not completed successfully")
+                            .httpStatusCode(200)
+                            .response(taskService.notCompletedTask(taskId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
+    // set payment status to paid
+    @Operation(summary = "Set payment status to paid (6)",description = "Set payment status to paid (6)")
+    @PutMapping("/set-payment-status")
+    public ResponseEntity<?> setPaymentStatus(@RequestParam String taskId) {
+        try {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .message("Payment status set to paid successfully")
+                            .httpStatusCode(200)
+                            .response(taskService.setPaymentStatus(taskId))
+                            .build()
+            );
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .message(e.getMessage())
+                            .httpStatusCode(e.getHttpStatusCode())
+                            .response(e.getDetails())
+                            .build()
+            );
+        }
+    }
+
 }

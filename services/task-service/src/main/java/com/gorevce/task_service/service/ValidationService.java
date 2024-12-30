@@ -1,6 +1,10 @@
 package com.gorevce.task_service.service;
 
 import com.gorevce.task_service.exception.CustomException;
+import com.gorevce.task_service.model.Application;
+import com.gorevce.task_service.model.Task;
+import com.gorevce.task_service.model.enums.ApplicationStatus;
+import com.gorevce.task_service.model.enums.TaskStatus;
 import com.gorevce.task_service.repository.ApplicationRepository;
 import com.gorevce.task_service.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +67,50 @@ public class ValidationService {
         } catch (HttpClientErrorException e) {
             return false;
         }
+    }
+
+    public TaskStatus getTaskStatus(String taskId) {
+        return taskRepository.findById(taskId).orElseThrow(
+                () -> new CustomException(
+                        "Task does not exist",
+                        400,
+                        null
+                )
+        ).getStatus();
+    }
+
+    public boolean isTaskOwnedByCompany(String taskId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(
+                () -> new CustomException(
+                        "Task does not exist",
+                        400,
+                        null
+                )
+        );
+        return doesCompanyExist(task.getCompanyId());
+    }
+
+    public void updateTaskStatus(String taskId, TaskStatus taskStatus) {
+        Task task = taskRepository.findById(taskId).orElseThrow(
+                () -> new CustomException(
+                        "Task does not exist",
+                        400,
+                        null
+                )
+        );
+        task.setStatus(taskStatus);
+        taskRepository.save(task);
+    }
+
+    public void updateApplicationStatus(String applicationId, ApplicationStatus applicationStatus) {
+        Application application = applicationRepository.findById(applicationId).orElseThrow(
+                () -> new CustomException(
+                        "Application does not exist",
+                        400,
+                        null
+                )
+        );
+        application.setStatus(applicationStatus);
+        applicationRepository.save(application);
     }
 }
