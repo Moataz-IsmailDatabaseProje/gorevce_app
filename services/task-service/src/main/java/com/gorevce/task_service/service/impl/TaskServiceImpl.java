@@ -4,6 +4,7 @@ import com.gorevce.task_service.dto.request.TaskRequest;
 import com.gorevce.task_service.dto.response.TaskResponse;
 import com.gorevce.task_service.exception.CustomException;
 import com.gorevce.task_service.model.Task;
+import com.gorevce.task_service.model.enums.ApplicationStatus;
 import com.gorevce.task_service.model.enums.DifficultyLevel;
 import com.gorevce.task_service.model.enums.TaskStatus;
 import com.gorevce.task_service.repository.TaskRepository;
@@ -329,5 +330,230 @@ public class TaskServiceImpl implements TaskService {
                 .toList();
     }
 
+    @Override
+    public TaskResponse acceptTask(String taskId, String applicationId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is assigned
+        if (task.getStatus() != TaskStatus.ASSIGNED) {
+            throw new CustomException(
+                    "Task cannot be accepted",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // check if application exists
+        if (!task.getApplicationIds().contains(applicationId)) {
+            throw new CustomException(
+                    "Application does not exist",
+                    400,
+                    Map.of(
+                            "applicationId", applicationId
+                    )
+            );
+        }
+
+        // accept task
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        task.setFreelancerId(applicationId);
+        // reject other applications
+        task.getApplicationIds().stream()
+                .filter(
+                        application -> !application.equals(applicationId)
+                )
+                .forEach(
+                        application -> validationService.updateApplicationStatus(application, ApplicationStatus.REJECTED)
+                );
+        Task acceptedTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(acceptedTask);
+    }
+
+    @Override
+    public TaskResponse rejectTask(String taskId, String applicationId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is assigned
+        if (task.getStatus() != TaskStatus.ASSIGNED) {
+            throw new CustomException(
+                    "Task cannot be rejected",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // check if application exists
+        if (!task.getApplicationIds().contains(applicationId)) {
+            throw new CustomException(
+                    "Application does not exist",
+                    400,
+                    Map.of(
+                            "applicationId", applicationId
+                    )
+            );
+        }
+
+        // reject task
+        task.setStatus(TaskStatus.PUBLISHED);
+        task.setFreelancerId(null);
+        // set application status to rejected
+        validationService.updateApplicationStatus(applicationId, ApplicationStatus.REJECTED);
+        Task rejectedTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(rejectedTask);
+    }
+
+    @Override
+    public TaskResponse completeTask(String taskId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is in progress
+        if (task.getStatus() != TaskStatus.IN_PROGRESS) {
+            throw new CustomException(
+                    "Task cannot be completed",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // complete task
+        task.setStatus(TaskStatus.IN_REVIEW);
+        Task completedTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(completedTask);
+    }
+
+    @Override
+    public TaskResponse reviewTask(String taskId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is in review
+        if (task.getStatus() != TaskStatus.IN_REVIEW) {
+            throw new CustomException(
+                    "Task cannot be reviewed",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // review task
+        task.setStatus(TaskStatus.IN_PAYMENT);
+        Task reviewedTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(reviewedTask);
+    }
+
+    @Override
+    public TaskResponse notCompletedTask(String taskId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is in progress
+        if (task.getStatus() != TaskStatus.IN_PROGRESS) {
+            throw new CustomException(
+                    "Task cannot be not completed",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // not complete task
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        Task notCompletedTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(notCompletedTask);
+    }
+
+    @Override
+    public TaskResponse setPaymentStatus(String taskId) {
+        // check if task exists
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Task not found",
+                                404,
+                                Map.of(
+                                        "taskId", taskId
+                                )
+                        )
+                );
+
+        // check if task status is in payment
+        if (task.getStatus() != TaskStatus.IN_PAYMENT) {
+            throw new CustomException(
+                    "Task cannot be paid",
+                    400,
+                    Map.of(
+                            "taskId", taskId,
+                            "status", task.getStatus().name()
+                    )
+            );
+        }
+
+        // pay task
+        task.setStatus(TaskStatus.PAID);
+        Task paidTask = taskRepository.save(task);
+        return mapTaskToTaskResponse(paidTask);
+    }
 
 }

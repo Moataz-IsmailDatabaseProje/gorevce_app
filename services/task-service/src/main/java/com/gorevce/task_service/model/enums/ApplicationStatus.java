@@ -4,6 +4,7 @@ public enum ApplicationStatus {
     CREATED,
     ACCEPTED,
     REJECTED,
+    COMPLETED,
     CANCELLED;
 
     // function to get the application enum from string

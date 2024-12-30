@@ -1,12 +1,17 @@
 package com.gorevce.task_service.service.impl;
 
+import com.gorevce.task_service.dto.EmailDto;
 import com.gorevce.task_service.dto.request.ApplicationRequest;
 import com.gorevce.task_service.dto.response.ApplicationResponse;
+import com.gorevce.task_service.dto.response.SendEmailResponse;
 import com.gorevce.task_service.exception.CustomException;
 import com.gorevce.task_service.model.Application;
+import com.gorevce.task_service.model.Task;
 import com.gorevce.task_service.model.enums.ApplicationStatus;
+import com.gorevce.task_service.model.enums.TaskStatus;
 import com.gorevce.task_service.repository.ApplicationRepository;
 import com.gorevce.task_service.service.ApplicationService;
+import com.gorevce.task_service.service.EmailService;
 import com.gorevce.task_service.service.TaskService;
 import com.gorevce.task_service.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationRepository applicationRepository;
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ApplicationResponse createApplication(ApplicationRequest applicationRequest) {
@@ -185,4 +193,130 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .map(this::mapApplicationToResponse)
                 .toList();
     }
+
+    @Override
+    public ApplicationResponse acceptApplication(String applicationId) {
+        // get application by id or throw exception
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Application does not exist",
+                                400,
+                                Map.of(
+                                        "applicationId", applicationId
+                                )
+                        )
+                );
+        // check if application status is created
+        if (application.getStatus() != ApplicationStatus.CREATED) {
+            throw new CustomException(
+                    "Application is not created",
+                    400,
+                    Map.of(
+                            "applicationId", applicationId
+                    )
+            );
+        }
+        // check if task exists
+        if (!validationService.doesTaskExist(application.getTaskId())) {
+            throw new CustomException(
+                    "Task does not exist",
+                    400,
+                    null
+            );
+        }
+        // check task status
+        if (validationService.getTaskStatus(application.getTaskId()) != TaskStatus.PUBLISHED) {
+            throw new CustomException(
+                    "Task is not existing",
+                    400,
+                    Map.of(
+                            "taskId", application.getTaskId()
+                    )
+            );
+        }
+        // check if task is owned by company
+        if (!validationService.isTaskOwnedByCompany(application.getTaskId())) {
+            throw new CustomException(
+                    "Task is not owned by company",
+                    400,
+                    Map.of(
+                            "taskId", application.getTaskId()
+                    )
+            );
+        }
+        // check if freelancer exists
+        if (!validationService.doesFreelancerExist(application.getFreelancerId())) {
+            throw new CustomException(
+                    "Freelancer does not exist",
+                    400,
+                    null
+            );
+        }
+
+        // update status of application to accepted
+        application.setStatus(ApplicationStatus.ACCEPTED);
+
+        // update status of task to assigned
+        validationService.updateTaskStatus(application.getTaskId(), TaskStatus.ASSIGNED);
+
+        // save application
+        Application saved = applicationRepository.save(application);
+
+        // return application
+        return mapApplicationToResponse(saved);
+    }
+
+    @Override
+    public SendEmailResponse sendEmail(EmailDto emailDto) {
+        // prepare email
+        try {
+            emailService.sendPlainTextEmail(emailDto.getEmail(), emailDto.getSubject(), emailDto.getMessage());
+            return SendEmailResponse.builder()
+                    .email(emailDto.getEmail())
+                    .subject(emailDto.getSubject())
+                    .message(emailDto.getMessage())
+                    .build();
+        } catch (CustomException e) {
+            throw new CustomException(
+                    "Email could not be sent",
+                    400,
+                    Map.of(
+                            "email", emailDto.getEmail()
+                    )
+            );
+        }
+    }
+
+    @Override
+    public ApplicationResponse applyPayment(String applicationId) {
+        // get application by id or throw exception
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "Application does not exist",
+                                400,
+                                Map.of(
+                                        "applicationId", applicationId
+                                )
+                        )
+                );
+        // check if application status is accepted
+        if (application.getStatus() != ApplicationStatus.ACCEPTED) {
+            throw new CustomException(
+                    "Application is not accepted",
+                    400,
+                    Map.of(
+                            "applicationId", applicationId
+                    )
+            );
+        }
+        // set Task status to completed
+        validationService.updateTaskStatus(application.getTaskId(), TaskStatus.COMPLETED);
+        // set application status to completed
+        validationService.updateApplicationStatus(applicationId, ApplicationStatus.COMPLETED);
+        // return application
+        return mapApplicationToResponse(application);
+    }
+
 }
