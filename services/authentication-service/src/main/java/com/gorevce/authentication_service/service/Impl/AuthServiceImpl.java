@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -481,5 +482,26 @@ public class AuthServiceImpl implements AuthService {
                         ).toList()
                 )
                 .build();
+    }
+
+    @Override
+    public List<UserInfoResponse> getAllUsers() {
+        // find all users
+        List<User> users = userRepository.findAll();
+        return users.stream().map(
+                userDto -> UserInfoResponse.builder()
+                        .Id(userDto.getId())
+                        .username(userDto.getUsername())
+                        .email(userDto.getEmail())
+                        .isEmailVerified(userDto.getIsEmailVerified())
+                        .roles(
+                                userDto.getRoles().stream().map(role -> RoleResponse.builder()
+                                        .id(role.getId())
+                                        .role(role.getName())
+                                        .build()
+                                ).toList()
+                        )
+                        .build()
+        ).toList();
     }
 }
