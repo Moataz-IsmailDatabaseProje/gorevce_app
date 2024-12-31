@@ -195,4 +195,30 @@ public class AuthController {
                     );
         }
     }
+
+    // get all users
+    @GetMapping("get-all-users")
+    @Operation(summary = "Get all users", description = "Get all users")
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Users retrieved successfully",
+                            200,
+                            authService.getAllUsers()
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
+
 }

@@ -35,4 +35,6 @@ public interface AuthService {
     UserInfoResponse setRoleToUser(String userId, String roleId);
 
     UserInfoResponse getUserInfoResponseById(String userId);
+
+    List<UserInfoResponse> getAllUsers();
 }
