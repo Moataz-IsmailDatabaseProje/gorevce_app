@@ -26,28 +26,19 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
 
     @Override
     public List<PermissionResponse> getAllPermissions() {
-        // get all permissions
-        List<EndpointPermission> endpointPermissions = endpointPermissionRepository.findAll();
-        List<PermissionResponse> permissionResponses = new ArrayList<>();
-        // for each permission in endpointPermissions
-        for (EndpointPermission endpointPermission : endpointPermissions) {
-            Set<Role> roles = endpointPermission.getRoles();
-            Set<RoleResponse> roleResponses = roles.stream().map(role -> RoleResponse.builder()
-                    .id(role.getId())
-                    .role(role.getName())
-                    .build()).collect(Collectors.toSet());
-
-            // set the roles of the permission to the roleResponses
-            permissionResponses = endpointPermissions.stream().map(
-                    permission -> PermissionResponse.builder()
-                    .id(permission.getId())
-                    .endpoint(permission.getEndpoint())
-                    .method(permission.getHttpMethod())
-                    .description(permission.getDescription())
-                    .roles(roleResponses)
-                    .build()).toList();
-        }
-        return permissionResponses;
+        return endpointPermissionRepository.findAll().stream().map(endpointPermission -> PermissionResponse.builder()
+                .id(endpointPermission.getId())
+                .endpoint(endpointPermission.getEndpoint())
+                .method(endpointPermission.getHttpMethod())
+                .description(endpointPermission.getDescription())
+                .roles(endpointPermission.getRoles()
+                        .stream()
+                        .map(role -> RoleResponse.builder()
+                                .id(role.getId())
+                                .role(role.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
+                .build()).collect(Collectors.toList());
     }
 
     @Override
