@@ -37,4 +37,5 @@ public interface AuthService {
     UserInfoResponse getUserInfoResponseById(String userId);
 
     UserInfoResponse removeRoleFromUser(String userId, String roleId);
+    List<UserInfoResponse> getAllUsers();
 }

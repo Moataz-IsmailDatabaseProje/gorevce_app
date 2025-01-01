@@ -8,16 +8,18 @@ public enum TaskStatus {
     // 3. status of the task
     VOIDED,
     // 3. status of the task
-    IN_PROGRESS,
     // 4. status of the task
-    IN_REVIEW,
+    ASSIGNED,
+    IN_PROGRESS,
     // 5. status of the task
-    IN_PAYMENT,
+    IN_REVIEW,
     // 6. status of the task
-    PAID,
+    IN_PAYMENT,
     // 7. status of the task
-    COMPLETED,
+    PAID,
     // 8. status of the task
+    COMPLETED,
+    // 9. status of the task
     POSTED,
     // can be used in any case
     IN_PROGRESS_PROBLEM,

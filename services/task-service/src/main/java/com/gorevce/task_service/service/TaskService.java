@@ -28,4 +28,16 @@ public interface TaskService {
     TaskResponse unvoidTask(String taskId);
     // get tasks for freelancer
     List<TaskResponse> getTasksForFreelancer();
+    // accept task -this method for user with freelancer role-
+    TaskResponse acceptTask(String taskId, String applicationId);
+    // reject task -this method for user with freelancer role-
+    TaskResponse rejectTask(String taskId, String applicationId);
+    // complete task -this method for user with freelancer role-
+    TaskResponse completeTask(String taskId);
+    // review task -this method for user with company role-
+    TaskResponse reviewTask(String taskId);
+
+    TaskResponse notCompletedTask(String taskId);
+
+    TaskResponse setPaymentStatus(String taskId);
 }
