@@ -430,7 +430,8 @@ public class AuthServiceImpl implements AuthService {
         // find by role id
         Role role = roleService.getRoleObjectById(roleId);
         // check if user already have the role
-        if (user.getRoles().contains(role)) {
+        List<String> rolesIds = user.getRoles().stream().map(Role::getId).toList();
+        if (rolesIds.contains(roleId)) {
             throw new CustomException("User already have the role", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
         }
         // set role
@@ -508,7 +509,8 @@ public class AuthServiceImpl implements AuthService {
             );
         }
         // check if user have the role
-        if (!user.getRoles().contains(role)) {
+        List<String> rolesIds = user.getRoles().stream().map(Role::getId).toList();
+        if (!rolesIds.contains(roleId)) {
             throw new CustomException(
                     "User does not have the role",
                     400,
@@ -518,8 +520,8 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
         }
-        // remove role
-        user.getRoles().remove(role);
+        // reset roles without removed
+        user.setRoles(user.getRoles().stream().filter(role1 -> !role1.getId().equals(roleId)).collect(Collectors.toSet()));
         // save user
         userRepository.save(user);
         return UserInfoResponse.builder()
