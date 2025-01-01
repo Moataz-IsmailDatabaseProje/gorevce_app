@@ -496,6 +496,17 @@ public class AuthServiceImpl implements AuthService {
                 );
         // find by role id
         Role role = roleService.getRoleObjectById(roleId);
+        // check if user deleting user ROLE_USER
+        if (role.getName().equals("ROLE_USER")) {
+            throw new CustomException(
+                    "Cannot delete ROLE_USER",
+                    400,
+                    Map.of(
+                            "user", userId,
+                            "role", roleId
+                    )
+            );
+        }
         // check if user have the role
         if (!user.getRoles().contains(role)) {
             throw new CustomException(
