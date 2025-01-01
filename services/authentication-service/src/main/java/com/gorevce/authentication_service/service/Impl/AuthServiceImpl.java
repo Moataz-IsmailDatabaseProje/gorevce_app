@@ -482,4 +482,83 @@ public class AuthServiceImpl implements AuthService {
                 )
                 .build();
     }
+
+    @Override
+    public UserInfoResponse removeRoleFromUser(String userId, String roleId) {
+        // find by user id
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new CustomException(
+                                "User not found",
+                                404,
+                                Map.of(
+                                        "user", userId,
+                                        "role", roleId
+                                )
+                        )
+                );
+        // find by role id
+        Role role = roleService.getRoleObjectById(roleId);
+        // check if user enabled
+        if (!user.getIsEnabled()) {
+            throw new CustomException(
+                    "User is disabled",
+                    400,
+                    Map.of(
+                            "user", userId,
+                            "role", roleId
+                    )
+            );
+        }
+        // check if user email verified
+        if (!user.getIsEmailVerified()) {
+            throw new CustomException(
+                    "Email not verified",
+                    400,
+                    Map.of(
+                            "user", userId,
+                            "role", roleId
+                    )
+            );
+        }
+        // check if user created password
+        if (!user.getIsPasswordCreated()) {
+            throw new CustomException(
+                    "Password not created",
+                    400,
+                    Map.of(
+                            "user", userId,
+                            "role", roleId
+                    )
+            );
+        }
+        // check if user have the role
+        if (!user.getRoles().contains(role)) {
+            throw new CustomException(
+                    "User does not have the role",
+                    400,
+                    Map.of(
+                            "user", userId,
+                            "role", roleId
+                    )
+            );
+        }
+        // remove role
+        user.getRoles().remove(role);
+        // save user
+        userRepository.save(user);
+        return UserInfoResponse.builder()
+                .Id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .isEmailVerified(user.getIsEmailVerified())
+                .roles(
+                        user.getRoles().stream().map(role1 -> RoleResponse.builder()
+                                .id(role1.getId())
+                                .role(role1.getName())
+                                .build()
+                        ).toList()
+                )
+                .build();
+    }
 }

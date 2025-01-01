@@ -165,4 +165,28 @@ public class RoleController {
                     );
         }
     }
+    // remove role from user
+    @DeleteMapping("/remove-role")
+    @Operation(summary = "Remove role from user", description = "Remove role from user")
+    public ResponseEntity<?> removeRoleFromUser(@RequestParam String userId, @RequestParam String roleId) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Role removed from user successfully",
+                            200,
+                            authService.removeRoleFromUser(userId, roleId)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }
