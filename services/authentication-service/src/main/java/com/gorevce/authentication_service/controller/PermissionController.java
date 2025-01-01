@@ -148,4 +148,54 @@ public class PermissionController {
     public PermissionResponse getPermissionByEndpoint(@RequestParam String endpoint, @RequestParam String httpMethod) {
         return endpointPermissionService.permissionByEndpointAndHttpMethod(endpoint, httpMethod);
     }
+
+    // add role
+    @PostMapping("/add-role")
+    @Operation(summary = "Add role", description = "Add role")
+    public ResponseEntity<?> addRole(@RequestParam String permissionId, @RequestParam String roleId) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Role added successfully",
+                            200,
+                            endpointPermissionService.addRole(permissionId, roleId)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
+
+    // remove role
+    @DeleteMapping("/remove-role")
+    @Operation(summary = "Remove role", description = "Remove role")
+    public ResponseEntity<?> removeRole(@RequestParam String permissionId, @RequestParam String roleId) {
+        try {
+            return ResponseEntity.ok(
+                    new ApiResponse(
+                            "Role removed successfully",
+                            200,
+                            endpointPermissionService.removeRole(permissionId, roleId)
+                    )
+            );
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatusCode())
+                    .body(
+                            new ApiResponse(
+                                    e.getMessage(),
+                                    e.getHttpStatusCode(),
+                                    e.getDetails()
+                            )
+                    );
+        }
+    }
 }

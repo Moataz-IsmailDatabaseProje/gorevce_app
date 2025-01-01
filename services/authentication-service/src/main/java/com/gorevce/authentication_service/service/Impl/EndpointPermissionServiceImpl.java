@@ -186,4 +186,68 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                 .roles(roleResponses)
                 .build();
     }
+
+    @Override
+    public PermissionResponse removeRole(String permissionId, String roleId) {
+        // find the permission by id
+        EndpointPermission endpointPermission = endpointPermissionRepository.findById(permissionId).orElseThrow(
+                () -> new CustomException("Permission not found", 404, Map.of("permissionId", permissionId))
+        );
+        // find the role by id
+        Role role = roleService.getRoleObjectById(roleId);
+        List<String> roleIdList = endpointPermission.getRoles().stream().map(Role::getId).toList();
+        // check if the role is in the permission
+        if (!roleIdList.contains(roleId)) {
+            throw new CustomException("Role not found in permission", 404, Map.of("roleId", roleId, "permissionId", permissionId));
+        }
+        // reset the roles of the permission
+        endpointPermission.setRoles(endpointPermission.getRoles().stream().filter(r -> !r.getId().equals(roleId)).collect(Collectors.toSet()));
+        // save the permission
+        EndpointPermission saved = endpointPermissionRepository.save(endpointPermission);
+        return PermissionResponse.builder()
+                .id(saved.getId())
+                .endpoint(saved.getEndpoint())
+                .method(saved.getHttpMethod())
+                .description(saved.getDescription())
+                .roles(saved.getRoles()
+                        .stream()
+                        .map(role1 -> RoleResponse.builder()
+                                .id(role1.getId())
+                                .role(role1.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
+                .build();
+    }
+
+    @Override
+    public PermissionResponse addRole(String permissionId, String roleId) {
+        // find the permission by id
+        EndpointPermission endpointPermission = endpointPermissionRepository.findById(permissionId).orElseThrow(
+                () -> new CustomException("Permission not found", 404, Map.of("permissionId", permissionId))
+        );
+        // find the role by id
+        Role role = roleService.getRoleObjectById(roleId);
+        List<String> roleIdList = endpointPermission.getRoles().stream().map(Role::getId).toList();
+        // check if the role is already in the permission
+        if (roleIdList.contains(roleId)) {
+            throw new CustomException("Role already in permission", 400, Map.of("roleId", roleId, "permissionId", permissionId));
+        }
+        // add the role to the permission
+        endpointPermission.getRoles().add(role);
+        // save the permission
+        EndpointPermission saved = endpointPermissionRepository.save(endpointPermission);
+        return PermissionResponse.builder()
+                .id(saved.getId())
+                .endpoint(saved.getEndpoint())
+                .method(saved.getHttpMethod())
+                .description(saved.getDescription())
+                .roles(saved.getRoles()
+                        .stream()
+                        .map(role1 -> RoleResponse.builder()
+                                .id(role1.getId())
+                                .role(role1.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
+                .build();
+    }
 }

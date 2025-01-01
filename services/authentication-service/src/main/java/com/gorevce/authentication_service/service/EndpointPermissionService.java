@@ -20,4 +20,8 @@ public interface EndpointPermissionService {
     PermissionResponse getPermissionById(String permissionId);
 
     PermissionResponse permissionByEndpointAndHttpMethod(String endpoint, String httpMethod);
+
+    PermissionResponse removeRole(String permissionId, String roleId);
+
+    PermissionResponse addRole(String permissionId, String roleId);
 }
