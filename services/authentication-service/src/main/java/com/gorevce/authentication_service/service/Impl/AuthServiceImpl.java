@@ -429,18 +429,6 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new CustomException("User not found", 404, new HashMap<>(Map.of("user", userId, "role", roleId))));
         // find by role id
         Role role = roleService.getRoleObjectById(roleId);
-        // check if user enabled
-        if (!user.getIsEnabled()) {
-            throw new CustomException("User is disabled", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
-        }
-        // check if user email verified
-        if (!user.getIsEmailVerified()) {
-            throw new CustomException("Email not verified", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
-        }
-        // check if user created password
-        if (!user.getIsPasswordCreated()) {
-            throw new CustomException("Password not created", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
-        }
         // check if user already have the role
         if (user.getRoles().contains(role)) {
             throw new CustomException("User already have the role", 400, new HashMap<>(Map.of("user", userId, "role", roleId)));
@@ -508,39 +496,6 @@ public class AuthServiceImpl implements AuthService {
                 );
         // find by role id
         Role role = roleService.getRoleObjectById(roleId);
-        // check if user enabled
-        if (!user.getIsEnabled()) {
-            throw new CustomException(
-                    "User is disabled",
-                    400,
-                    Map.of(
-                            "user", userId,
-                            "role", roleId
-                    )
-            );
-        }
-        // check if user email verified
-        if (!user.getIsEmailVerified()) {
-            throw new CustomException(
-                    "Email not verified",
-                    400,
-                    Map.of(
-                            "user", userId,
-                            "role", roleId
-                    )
-            );
-        }
-        // check if user created password
-        if (!user.getIsPasswordCreated()) {
-            throw new CustomException(
-                    "Password not created",
-                    400,
-                    Map.of(
-                            "user", userId,
-                            "role", roleId
-                    )
-            );
-        }
         // check if user have the role
         if (!user.getRoles().contains(role)) {
             throw new CustomException(
