@@ -305,6 +305,10 @@ public class AuthServiceImpl implements AuthService {
         if (userToUpdate == null) {
             throw new CustomException("User not found", 404, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
         }
+        // check if new email is not in use
+        if (userRepository.findByEmail(changeEmailRequest.getNewEmail()).isPresent()) {
+            throw new CustomException("Email already in use", 400, Collections.singletonMap("email", changeEmailRequest.getNewEmail()));
+        }
         // check if user enabled
         if (!userToUpdate.getIsEnabled()) {
             throw new CustomException("User is disabled", 400, Collections.singletonMap("email", changeEmailRequest.getLastEmail()));
@@ -373,6 +377,10 @@ public class AuthServiceImpl implements AuthService {
         // check if user email verified
         if (!userToUpdate.getIsEmailVerified()) {
             throw new CustomException("Email not verified", 400, Collections.singletonMap("username", changeUsernameRequest.getLastUsername()));
+        }
+        // check new username not in use
+        if (userRepository.findByUsername(changeUsernameRequest.getNewUsername()).isPresent()) {
+            throw new CustomException("Username already in use", 400, Collections.singletonMap("username", changeUsernameRequest.getNewUsername()));
         }
         // find user of endpoint by username
         String tokenWithoutBearer = token.substring(7);
