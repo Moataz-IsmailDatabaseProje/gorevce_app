@@ -47,6 +47,13 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
         if (endpointPermissionRepository.existsByEndpointAndHttpMethod(createPermissionRequest.getEndpoint(), createPermissionRequest.getMethod())) {
             throw new CustomException("Permission already exists", 400, Map.of("endpoint", createPermissionRequest.getEndpoint(), "method", createPermissionRequest.getMethod()));
         }
+        // check if all roles are exists by Id
+        createPermissionRequest.getRoles().forEach(roleId -> {
+            if (!roleService.roleExists(roleId)) {
+                throw new CustomException("Role not found", 404, Map.of("roleId", roleId));
+            }
+        });
+
 
         // create a new permission
         EndpointPermission endpointPermission = EndpointPermission.builder()
@@ -57,7 +64,7 @@ public class EndpointPermissionServiceImpl implements EndpointPermissionService 
                         .getRoles()
                         .stream()
                         .map(
-                                roleName -> roleService.getRoleByName(roleName)
+                                roleId -> roleService.getRoleObjectById(roleId)
                         )
                         .collect(Collectors.toSet())
                 ).build();
