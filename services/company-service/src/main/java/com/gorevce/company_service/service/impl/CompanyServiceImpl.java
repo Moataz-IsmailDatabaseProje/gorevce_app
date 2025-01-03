@@ -38,7 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyResponse createCompany(CompanyRequest companyRequest) {
         // check if company has user
         if (companyRequest.getUserId() != null) {
-            UserDto user = restTemplate.getForObject(authenticatorServiceUrl + "auth/rest-template/get-user/" + companyRequest.getUserId(), UserDto.class);
+            UserDto user = restTemplate.getForObject(authenticatorServiceUrl + "/auth/rest-template/get-user/" + companyRequest.getUserId(), UserDto.class);
         } else {
             throw new CustomException(
                     "Company must have a user",
