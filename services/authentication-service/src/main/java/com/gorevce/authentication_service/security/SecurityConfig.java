@@ -66,6 +66,7 @@ public class SecurityConfig {
                             ).permitAll();
                             auth.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
                             auth.requestMatchers("/authentication/**").permitAll();
+                            auth.requestMatchers("/authentication/auth/rest-template/**").permitAll();
                             auth.requestMatchers("/authentication/permissions/rest-template/**").permitAll();
                             auth.anyRequest().authenticated();
                         }
