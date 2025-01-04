@@ -177,7 +177,7 @@ public class CompanyController {
                     new ApiResponse(
                             "Companies retrieved successfully",
                             200,
-                            companyService.getCompaniesByUserId(userId)
+                            companyService.getCompanyByUserId(userId)
                     )
             );
         } catch (CustomException e) {
@@ -202,7 +202,7 @@ public class CompanyController {
                     new ApiResponse(
                             "Companies retrieved successfully",
                             200,
-                            companyService.getCompaniesByAddressId(addressId)
+                            companyService.getCompanyByAddressId(addressId)
                     )
             );
         } catch (CustomException e) {

@@ -14,7 +14,7 @@ public interface CompanyRepository extends MongoRepository<Company, String> {
 
     Boolean existsByPhone(String phone);
 
-    List<Company> findByUserId(String userId);
+    Company findByUserId(String userId);
 
-    List<Company> findByAddressId(String addressId);
+    Company findByAddressId(String addressId);
 }

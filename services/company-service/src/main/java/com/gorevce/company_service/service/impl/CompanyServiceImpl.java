@@ -244,11 +244,22 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyResponse> getCompaniesByUserId(String userId) {
-        // get companies by user id
-        List<Company> companies = companyRepository.findByUserId(userId);
-        // return companies
-        return companies.stream().map(company -> CompanyResponse.builder()
+    public CompanyResponse getCompanyByUserId(String userId) {
+        // check if user exists
+        UserDto user = restTemplate.getForObject(authenticatorServiceUrl + "/auth/rest-template/get-user/" + userId, UserDto.class);
+        if (user == null) {
+            throw new CustomException(
+                    "User not found",
+                    404,
+                    Map.of(
+                            "userId", userId
+                    )
+            );
+        }
+        // get company by user id
+        Company company = companyRepository.findByUserId(userId);
+        // return company
+        return CompanyResponse.builder()
                 .id(company.getId())
                 .name(company.getName())
                 .description(company.getDescription())
@@ -259,15 +270,26 @@ public class CompanyServiceImpl implements CompanyService {
                 .logo(company.getLogo())
                 .userId(company.getUserId())
                 .addressId(company.getAddressId())
-                .build()).toList();
+                .build();
     }
 
     @Override
-    public List<CompanyResponse> getCompaniesByAddressId(String addressId) {
-        // get companies by address id
-        List<Company> companies = companyRepository.findByAddressId(addressId);
-        // return companies
-        return companies.stream().map(company -> CompanyResponse.builder()
+    public CompanyResponse getCompanyByAddressId(String addressId) {
+        // check if address exists
+        AddressDto address = restTemplate.getForObject(addressServicePath + "/rest-template/get-address/" + addressId, AddressDto.class);
+        if (address == null) {
+            throw new CustomException(
+                    "Address not found",
+                    404,
+                    Map.of(
+                            "addressId", addressId
+                    )
+            );
+        }
+        // get company by address id
+        Company company = companyRepository.findByAddressId(addressId);
+        // return company
+        return CompanyResponse.builder()
                 .id(company.getId())
                 .name(company.getName())
                 .description(company.getDescription())
@@ -278,7 +300,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .logo(company.getLogo())
                 .userId(company.getUserId())
                 .addressId(company.getAddressId())
-                .build()).toList();
+                .build();
     }
 
     @Override
