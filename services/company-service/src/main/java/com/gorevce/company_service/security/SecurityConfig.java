@@ -61,7 +61,7 @@ public class SecurityConfig {
                         }
                 );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(roleAuthorizationFilter, JwtAuthenticationFilter.class);
+        // http.addFilterAfter(roleAuthorizationFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 
