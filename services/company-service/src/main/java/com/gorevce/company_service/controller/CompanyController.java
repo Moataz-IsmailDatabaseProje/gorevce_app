@@ -169,9 +169,9 @@ public class CompanyController {
     }
 
     // get all companies by user id
-    @GetMapping("/get-companies-by-user-id")
-    @Operation(summary = "Get all companies by user id", description = "Get all companies by user id")
-    public ResponseEntity<?> getCompaniesByUserId(@RequestParam String userId) {
+    @GetMapping("/get-company-by-user-id")
+    @Operation(summary = "Get all company by user id", description = "Get all company by user id")
+    public ResponseEntity<?> getCompanyByUserId(@RequestParam String userId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
@@ -194,9 +194,9 @@ public class CompanyController {
     }
 
     // get companies by address id
-    @GetMapping("/get-companies-by-address-id")
-    @Operation(summary = "Get companies by address id", description = "Get companies by address id")
-    public ResponseEntity<?> getCompaniesByAddressId(@RequestParam String addressId) {
+    @GetMapping("/get-company-by-address-id")
+    @Operation(summary = "Get company by address id", description = "Get company by address id")
+    public ResponseEntity<?> getCompanyByAddressId(@RequestParam String addressId) {
         try {
             return ResponseEntity.ok(
                     new ApiResponse(
