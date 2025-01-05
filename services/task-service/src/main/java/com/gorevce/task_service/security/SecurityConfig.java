@@ -26,8 +26,8 @@ import java.util.List;
 public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Autowired
-    private RoleAuthorizationFilter roleAuthorizationFilter;
+//    @Autowired
+//    private RoleAuthorizationFilter roleAuthorizationFilter;
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {

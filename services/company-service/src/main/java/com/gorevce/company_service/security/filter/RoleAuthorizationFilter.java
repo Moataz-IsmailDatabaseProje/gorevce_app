@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class RoleAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
